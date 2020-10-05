@@ -2,7 +2,6 @@
 
 	import firebase from 'firebase/app'
 
-
 	import { onMount } from "svelte";
 	onMount(()=>{
 		const db =  firebase.firestore()
