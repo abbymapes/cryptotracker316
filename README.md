@@ -13,7 +13,7 @@ This will only be done once initially.
 ```	
 - Make sure you have firebase CLI installed and are logged in:
 ```bash
-	npm install -g firebase-tools
+	sudo npm install -g firebase-tools
 	firebase login
 ```
 ### Setup Frontend 
