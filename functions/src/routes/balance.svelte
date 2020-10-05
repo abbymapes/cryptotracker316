@@ -1,15 +1,5 @@
 <script>
 import NavBar from './NavBar.svelte';
-
-import { onMount } from "svelte";
-	onMount(()=>{
-		const db =  firebase.firestore()
-		db.collection("test").get().then(snap =>{
-			snap.forEach(item=>{
-				 console.log(item.id, " => ", item.data());
-			})
-		})
-	})
 </script>
 
 <style>
@@ -59,43 +49,29 @@ import { onMount } from "svelte";
   font-size: 40px;
   color: hsl(210, 35%, 30%);
 }
-body{
+body {
   height: 100%;
   word-break: normal;
 }
-
-a {
-  display: block;
-  color: hsl(210, 35%, 70%);
-  text-align: center;
-  padding: 15px 15px;
-  text-decoration: none;
-  font-size: 18px;
-}
-
-a:hover {
-  color: hsl(210, 35%, 40%);
-}
-
 </style>
 
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Add Balance</title>
     <link rel="stylesheet" href="style.css">
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
 
 <body>
-  <div id = "content"> 
+  <div id = "content">
+  <NavBar/>
+  
   <div class="page-container">
     <div class="center">
-			<div class="header">CryptoCurrency</div>
-			<br>
-			<a href = "/feed">Login Here</a>
-			<!--Content goes here-->
+      <div class="header">Add Balance</div>
+      <!--Content goes here-->
       </div>
     </div>
   </div>
