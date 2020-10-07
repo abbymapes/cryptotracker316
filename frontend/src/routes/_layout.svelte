@@ -4,6 +4,7 @@
     import Cookies from 'js-cookie';
 	import firebase from 'firebase/app'
     import Nav from './../components/Nav.svelte'
+    export let segment;
     const { session ,page} = stores();
 
      onMount(async () => {
@@ -37,7 +38,8 @@
         });
     });
 </script>
+
 {#if $page.error==null}
-<Nav></Nav>
+
 {/if}
 	<slot></slot>
