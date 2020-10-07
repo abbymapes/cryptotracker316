@@ -15,7 +15,7 @@ This will only be done once initially.
 - Make sure you have `npm` and `node` (12.x) installed. If not, install them from [here](https://nodejs.org/en/download/).
 - Make sure you have firebase CLI installed and are logged in:
 ```bash
- npm install -g firebase-tools
+ sudo npm install -g firebase-tools
  firebase login
 ```
 ### Setup Frontend 
