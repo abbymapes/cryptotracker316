@@ -14,3 +14,18 @@ export async function firestore() {
     }
 }
 
+export async function auth() {
+    if (process.browser) {
+        return window.au
+    } else {
+        const firebase = await import('firebase')
+        if (firebase.apps.length == 0) {
+            let app = firebase.initializeApp(firebaseConfig)
+            return app.auth()
+        }
+        else {
+            return firebase.apps[0].auth()
+        }
+    }
+}
+
