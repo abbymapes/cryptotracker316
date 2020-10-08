@@ -40,6 +40,6 @@
 </script>
 
 {#if $page.error==null}
-
+<Nav/>
 {/if}
 	<slot></slot>
