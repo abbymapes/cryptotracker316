@@ -6,11 +6,14 @@
 
   const {session} = stores()
 
-	onMount(()=>{
-    if ($session.user) {
-        goto('/authUser/feed');
-    }
-	});
+
+	onMount( async()=>{
+		 fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd')
+		.then(res=>res.json())
+		.then(data => console.log(data));
+		
+	})
+
 </script>
 
 <div id = "content"> 
@@ -86,3 +89,4 @@
   }
 
 </style>
+

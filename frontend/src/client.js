@@ -3,6 +3,7 @@ import * as sapper from '@sapper/app';
 import firebase from 'firebase/app';
 import "firebase/firestore";
 import "firebase/auth";
+import 'firebase/database'
 // These imports load individual services into the firebase namespace.
 
 
@@ -21,6 +22,7 @@ const firebaseConfig = {
 
 let app =firebase.initializeApp(firebaseConfig)
 window.db = app.firestore()
+window.au = app.auth()
 
 
 sapper.start({

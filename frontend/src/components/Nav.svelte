@@ -10,8 +10,10 @@
 		<li><a aria-current="{segment === 'search' ? 'page' : undefined}" href="/authUser/search">Search</a></li>
 		<li><a aria-current="{segment === 'popular' ? 'page' : undefined}" href="/authUser/popular">Popular</a></li>
 		<li><a aria-current="{segment === 'transaction' ? 'page' : undefined}" href="/authUser/transaction">New Transaction</a></li>
-		
 		<li><ProfileDropdown/></li>
+		<li><a href="/"  rel=prefetch>home</a></li>
+		<li><a href="login" rel=prefetch>login</a></li>
+		<li><a href="login?signup=1" rel=prefetch>signup</a></li>
 
 		<!-- for the blog link, we're using rel=prefetch so that Sapper prefetches
 		     the blog data when we hover over the link or tap it on a touchscreen -->
