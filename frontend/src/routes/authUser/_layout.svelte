@@ -3,7 +3,7 @@
 	export let segment;
 </script>
 
-<Nav {segment}/>
+
 
 <div id = "content">
   <div class="page-container">
