@@ -14,6 +14,7 @@
     async function login() {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then( res => {
+                waiting = true; 
                 goto('/profile');
             })
             .catch( e =>{
