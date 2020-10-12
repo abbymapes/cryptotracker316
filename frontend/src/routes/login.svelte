@@ -1,8 +1,8 @@
-
 <script>
     import { goto,stores } from '@sapper/app';
-    import firebase from 'firebase/app'
-    import {onMount} from 'svelte'
+    import firebase from 'firebase/app';
+    import {onMount} from 'svelte';
+    export let segment;
 
     let email = '';
     let password = '';
@@ -18,6 +18,7 @@
                 goto('/profile');
             })
             .catch( e =>{
+
                 console.log(e);
             })
     }
