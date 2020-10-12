@@ -1,14 +1,64 @@
 <script>
-  let userLogo = "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50";
-  let cryptoLogo = "https://s3.amazonaws.com/logos.brandpa.com/uploads/0d56d34d5b9d03d82a25c9e4be00ce89/SuniCoin.png";
-  let cryptoName = "SuniCoin";
-  let userName = "John Doe";
-  let transactionType = "Bought";
-  let transactionTime = "5:03pm";
-  let transactionDate = "10/4/20";
-  let username = "johnDoe";
-  let transactionCaption = "Just bought this great new cryptocurrency!";
-  let likeStatus = "Like";
+  import { goto,stores } from '@sapper/app';
+  import firebase from 'firebase/app';
+  export let username;
+  export let userLogo;
+  export let cryptoLogo;
+  export let cryptoName;
+  export let transactionType;
+  export let transactionTime;
+  export let transactionDate;
+  export let transactionCaption;
+  export let isLiked = false;
+  export let likeId;
+  export let likeCount; 
+  export let amount;
+  export let currentUid;
+  export let transId;
+  export let comments;
+  var commentInput;
+
+  async function handleComment(id) {
+    db.collection("comments").add({
+        uid: currentUid,
+        transid: id,
+        comment: commentInput,
+        time : firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then(function(docRef) {
+        console.log("Comment document written with ID: ", docRef.id);
+        location.reload();
+      })
+      .catch(function(error) {
+        console.error("Error adding document: ", error);
+      });
+    return false;
+  }
+
+  async function handleLike(id) {
+    if (!isLiked) {
+      db.collection("likes").add({
+        uid: currentUid,
+        transid: id
+      })
+      .then(function(docRef) {
+        likeId = docRef.id;
+        console.log("Document written with ID: ", docRef.id);
+      })
+      .catch(function(error) {
+        console.error("Error adding document: ", error);
+      });
+      likeCount += 1;
+    } else {
+      db.collection("likes").doc(likeId).delete().then(function() {
+        console.log("Document successfully deleted!");
+      }).catch(function(error) {
+          console.error("Error removing document: ", error);
+      });
+      likeCount -=1;
+    }
+    isLiked = !isLiked;
+  }
 
 </script>
 
@@ -20,7 +70,7 @@
 				<a href = "/authUser/profile"><img class = "feed-avatar" src = '{userLogo}' alt = 'User Avatar'></a>
 			</th>
 			<th class ='transaction-name'>
-				<a class = "username-link" href = "/authUser/profile">{userName}</a>
+				<a class = "username-link" href = "/authUser/profile">{username}</a>
 			</th>
 			<th class = 'transaction-date'>
 				{transactionTime}
@@ -30,25 +80,37 @@
 		</tr>
 	</table>
 
-	<p>{transactionType} <a class = 'crypto-link' href = "/authUser/cryptocurrency">{cryptoName}</a>.</p>
+	<p>{transactionType} ${amount} of <a class = 'crypto-link' href = "/authUser/cryptocurrency">{cryptoName}</a>.</p>
 			<a href = "/authUser/cryptocurrency">
 				<img src = '{cryptoLogo}' class = 'transaction-logo' alt = 'cryptologo'>
 			<br></a>
               
 	<p class = 'transaction-caption'> <a class = "username-caption-link" href = "/authUser/profile"><b> @{username}: </b></a>{transactionCaption}</p>
-
+  <p class = 'transaction-caption'>{likeCount} likes</p>
 	<table class = 'like-and-comment'>
+    <tr>
+      <th colspan = 2;>
+        <p>Comments</p>
+      </th>
+    </tr>
+    {#each comments as comment}
+      <tr>
+        <td colspan = 2;>
+          <p class = 'comment'><a class = "username-caption-link" href = "/authUser/profile"><b> @{comment.username}: </b></a>{comment.comment}</p>
+        </td>
+      </tr>
+    {/each}
 		<tr>
 			<td style = 'width: 25px;'>
-				<button class = 'like-button'>{likeStatus}</button>
+				<button class = 'like-button' on:click = {handleLike(transId)}>{(isLiked) ? 'Unlike': "Like"}</button>
 			</td>
 			<td>
-				<form class="comment-box" name="comment-box">
-			<textarea class="comment-input" id="comment-input" placeholder="Leave a comment"></textarea>
-				<input type="submit"/>
+				<form class="comment-box" name="comment-box" on:submit|preventDefault = {handleComment(transId)}>
+			    <textarea class="comment-input" id="comment-input" placeholder="Leave a comment" bind:value = {commentInput}></textarea>
+				  <input type="submit"/>
 				</form>
 			</td>
-		</tr>
+    </tr>
 	</table>
 </div>
 
@@ -113,6 +175,7 @@
     font-size: 12px;
     font-family: inherit;
     color: hsl(210, 35%, 50%);
+    white-space: nowrap;
   }
 
   .transaction-caption {
@@ -120,6 +183,10 @@
     text-decoration: none;
   }
 
+  .comment {
+    font-size: 12px;
+    text-decoration: none;
+  }
   .username-caption-link {
     color: hsl(210, 35%, 20%);
     text-align: center;
@@ -155,6 +222,7 @@
     border-collapse: collapse;
     border-spacing: 0;
     text-align: left;
+    padding: 0px;
   }
 
   form {
@@ -198,7 +266,7 @@
     margin-left: auto;
     margin-right: auto;
     height: auto;
-    max-width: 70%;
+    max-width: 200px;
     min-width: 50px;
   }
 </style>
