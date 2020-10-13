@@ -18,7 +18,6 @@
                 goto('/profile');
             })
             .catch( e =>{
-
                 console.log(e);
             })
     }
@@ -44,7 +43,9 @@
                         uid:res.user.uid,
                         email:res.user.email,
                         createdOn: firebase.firestore.FieldValue.serverTimestamp(),
-                        username: username
+                        username: username,
+                        picture: 'https://www.alliancerehabmed.com/wp-content/uploads/icon-avatar-default.png',
+                        balance: 1000
                     })
                     goto('/profile');
                 })
