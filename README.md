@@ -34,7 +34,7 @@ Every `.svelte` file in `routes` corresponds to a page, and in `components` they
 ### Setup Backend  ( Node / Firebase )
 Add/edit firebase functions:
 ```bash
- cd firebase
+ cd firebase/functions
  npm i
 ```
 ####  Where to code:
