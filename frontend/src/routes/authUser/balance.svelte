@@ -7,11 +7,9 @@
 
 <head>
   <title>Balance</title>
-  <br>
-  <p> 
-    Balance = {balance};
-  </p>
 </head>
 
 <div class="header">Add Balance</div>
+<br>
+<p> Balance = {balance}; </p>
 <!--Content goes here-->
