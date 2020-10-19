@@ -1,4 +1,5 @@
 <script>
+	
   let balance = 1000;
   let numbers = 500;
   let yes = false;
