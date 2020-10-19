@@ -48,7 +48,7 @@
                         picture: 'https://www.alliancerehabmed.com/wp-content/uploads/icon-avatar-default.png',
                         balance: 1000
                     })
-                    goto('/feed');
+                    goto('/authUser/feed');
                 })
                 .catch( e =>{
                     console.log(e);
