@@ -18,6 +18,7 @@
   export let x;
   $: console.log(x)
 </script>
+
 <div class="bar">
   {#each currencies as y}
     <span>
@@ -25,6 +26,12 @@
     </span>
   {/each}
 </div>
+<br>
+<div class = "name">
+  <h1>Aether</h1>
+</div>
+
+
 <style>
 .bar{
   background-color: #2A2A2A;
@@ -34,6 +41,17 @@
   align-items: center;
   padding:5px;
   justify-content: space-around;
+}
+
+h1 {
+  background-color: white;
+  color: #2A2A2A;
+  display: flex;
+  align-items: center;
+  margin-top: 50px;
+  padding:5px;
+  justify-content: space-around;
+  font-size: 200px;
 }
 
 </style>

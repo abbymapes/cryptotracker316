@@ -1,9 +1,7 @@
 <script>
-	import Nav from '../../components/Nav.svelte';
-	export let segment;
+  import Nav from '../../components/Nav.svelte';
+  
 </script>
-
-
 
 <div id = "content">
   <div class="page-container">

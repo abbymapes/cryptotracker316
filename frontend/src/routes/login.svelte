@@ -2,7 +2,6 @@
     import { goto,stores } from '@sapper/app';
     import firebase from 'firebase/app';
     import {onMount} from 'svelte';
-    export let segment;
 
     let email = '';
     let password = '';
@@ -15,7 +14,7 @@
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then( res => {
                 waiting = true; 
-                goto('/profile');
+                goto('/authUser/feed');
             })
             .catch( e =>{
                 console.log(e);
@@ -47,7 +46,7 @@
                         picture: 'https://www.alliancerehabmed.com/wp-content/uploads/icon-avatar-default.png',
                         balance: 1000
                     })
-                    goto('/profile');
+                    goto('/feed');
                 })
                 .catch( e =>{
                     console.log(e);

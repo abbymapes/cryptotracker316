@@ -35,7 +35,7 @@
 </script>
 
 
-<h1>Hello {uname} {ux} </h1> 
+<h1>Hello {uname} </h1> 
 {#if kaijen}
     {kaijen}
 {/if}

@@ -7,12 +7,12 @@
 	<Hoverable let:hovering={active}>
 		<div class:active>
 			{#if active}
-				<a href="/profile">Profile</a>
+				<a href="profile">Profile</a>
 				<a href="/authUser/portfolio">Portfolio</a>
 				<a href="/authUser/balance">Add Balance</a>
 				<a href = "logout">Logout</a>
 			{:else}
-				<a href="/authUser/profile">Profile</a>
+				<a href="profile">Profile</a>
 			{/if}
 		</div>
 	</Hoverable>
