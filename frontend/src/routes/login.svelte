@@ -21,6 +21,8 @@
             })
     }
 
+    // test
+
     async function logout() {
          firebase.auth().signOut()
             .then( res => {
