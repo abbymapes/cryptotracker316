@@ -47,6 +47,6 @@
 </script>
 
 {#if $page.error==null}
-<Nav/>
+    <Nav segment = {$page.path}/>
 {/if}
 	<slot></slot>
