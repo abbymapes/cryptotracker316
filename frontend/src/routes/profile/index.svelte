@@ -2,7 +2,7 @@
     import {firestore,auth} from './../../firebase'
 	export async function preload(page, session) {
         let { user,ux } = session;
-        if (!user) {
+        if (!user || ux===undefined) {
             return this.redirect(302, '/login');
         }
 

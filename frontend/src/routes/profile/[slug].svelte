@@ -5,17 +5,21 @@
 	export async function preload(page, session) {
         const { slug } = page.params;
         let { user,ux } = session;
-
-
-        return {uname : slug, ux}
+        let falcon = slug==ux
+        return {uname : slug, ux, falcon}
     }
 </script>
 <script>
+
     import firebase from 'firebase/app'
-    import { goto } from '@sapper/app';
+    import { goto,stores } from '@sapper/app';
     import { onMount } from "svelte";
-    export let uname
-    export let ux
+
+    const { page} = stores();
+    const { slug } = $page.params;
+    export let uname = slug
+    export let ux = ""
+    export let falcon = false
     let kaijen 
     async function logout() {
         return firebase.auth().signOut().then(() => {
@@ -23,19 +27,20 @@
         });
     }
     onMount(async()=>{
-        console.log(ux)
-        firebase.firestore().collection("users").where("username", "==", ux)
+        console.log(uname)
+        firebase.firestore().collection("users").where("username", "==", uname)
         .get()
         .then( snap=>{
             snap.forEach(doc=>{
-                kaijen = doc.data().balance
+                kaijen = JSON.stringify( doc.data())
             })
         })
     })
+    
 </script>
 
 
-<h1>Hello {uname} {ux} </h1> 
+<h1>Hello {uname} {ux} {falcon}</h1> 
 {#if kaijen}
     {kaijen}
 {/if}
