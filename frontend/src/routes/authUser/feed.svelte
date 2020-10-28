@@ -31,7 +31,6 @@
                 var count = getLikeCount(db, item.data().transid).then(function(count) {
                   var comments = getComments(db, item.data().transid).then(function(comments) {
                     var commentsWithNames = getUsernames(db, comments).then(function(finalComments) {
-                      console.log(finalComments)
                       var post = {username: user.uname,
                         transid: item.data().transid,
                         currentUid: currentUid,
@@ -116,7 +115,6 @@
     var comments = await db.collection("comments").where("transid", "==", transid).orderBy("time", "asc").get().then(function(snap) {
       var commentList = [];
       snap.forEach(function(item) {
-        console.log(item.data());
         var commentToAdd = {
           id: item.id,
           comment: item.data().comment,

@@ -68,17 +68,20 @@
     }
     onMount(()=>{
         first = false;
-
+        console.log(session.user)
+        if ($session.user) {
+            goto('/authUser/feed');
+        }
     })
 
 $: username , isunique()
 
 </script>
 {#if waiting}
-waiting
+    Waiting...
 {:else}
 {#if $session.user}
-<button on:click={logout}>Logout</button>    
+    <button on:click={logout}>Logout</button>    
 {:else }
 
     <h1> {#if $page.query.signup}

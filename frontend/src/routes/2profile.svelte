@@ -1,6 +1,4 @@
 <script context="module">
-
-
     import {firestore,auth} from './../firebase'
 	export async function preload(page, session) {
         let { user } = session;
@@ -24,6 +22,7 @@
     import firebase from 'firebase/app'
     import { goto } from '@sapper/app';
     export let uname
+    console.log(uname)
     async function logout() {
         return firebase.auth().signOut().then(() => {
             goto('/login');
@@ -31,6 +30,6 @@
     }
 </script>
 
-
 <h1>Hello {uname}</h1> 
+
 <button on:click={logout}>Logout</button>

@@ -67,10 +67,10 @@
 	<table class = 'transaction-header'>
 		<tr>
 			<th class ='transaction-profile-pic'>
-				<a href = "/authUser/profile"><img class = "feed-avatar" src = '{userLogo}' alt = 'User Avatar'></a>
+				<a href = "profile/{username}"><img class = "feed-avatar" src = '{userLogo}' alt = 'User Avatar'></a>
 			</th>
 			<th class ='transaction-name'>
-				<a class = "username-link" href = "/authUser/profile">{username}</a>
+				<a class = "username-link" href = "profile/{username}">{username}</a>
 			</th>
 			<th class = 'transaction-date'>
 				{transactionTime}
@@ -85,7 +85,7 @@
 				<img src = '{cryptoLogo}' class = 'transaction-logo' alt = 'cryptologo'>
 			<br></a>
               
-	<p class = 'transaction-caption'> <a class = "username-caption-link" href = "/authUser/profile"><b> @{username}: </b></a>{transactionCaption}</p>
+	<p class = 'transaction-caption'> <a class = "username-caption-link" href = "profile/{username}"><b> @{username}: </b></a>{transactionCaption}</p>
   <p class = 'transaction-caption'>{likeCount} likes</p>
 	<table class = 'like-and-comment'>
     <tr>
@@ -96,7 +96,7 @@
     {#each comments as comment}
       <tr>
         <td colspan = 2;>
-          <p class = 'comment'><a class = "username-caption-link" href = "/authUser/profile"><b> @{comment.username}: </b></a>{comment.comment}</p>
+          <p class = 'comment'><a class = "username-caption-link" href = "profile/{comment.username}"><b> @{comment.username}: </b></a>{comment.comment}</p>
         </td>
       </tr>
     {/each}
