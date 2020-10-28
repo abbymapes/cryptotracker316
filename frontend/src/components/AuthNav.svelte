@@ -1,25 +1,20 @@
 <script>
 	export let segment;
 	import ProfileDropdown from '../components/ProfileDropdown.svelte';
-	console.log(segment);
-	$: active = (segment.includes("authUser") || segment.includes("profile")  == true);
 </script>
 
 
 <nav>
 	<ul>
-		{#if active}
-			<li><a aria-current="{segment === '/authUser/feed' ? 'page' : undefined}" href="/authUser/feed">Feed</a></li>
-			<li><a aria-current="{segment === '/authUser/search' ? 'page' : undefined}" href="/authUser/search">Search</a></li>
-			<li><a aria-current="{segment === '/authUser/popular' ? 'page' : undefined}" href="/authUser/popular">Popular</a></li>
-			<li><a aria-current="{segment === '/authUser/transaction' ? 'page' : undefined}" href="/authUser/transaction">New Transaction</a></li>
-			<li><ProfileDropdown/></li>
-		{:else}
-			<li><a href="/"  rel=prefetch>Home</a></li>
-			<li><a href="login" rel=prefetch>Login</a></li>
-			<li><a href="login?signup=1" rel=prefetch>Sign Up</a></li>
-			<!--<li><a href="profile" rel=prefetch>Profile</a></li>-->
-		{/if}
+		<li><a aria-current="{segment === 'feed' ? 'page' : undefined}" href="/authUser/feed">Feed</a></li>
+		<li><a aria-current="{segment === 'search' ? 'page' : undefined}" href="/authUser/search">Search</a></li>
+		<li><a aria-current="{segment === 'popular' ? 'page' : undefined}" href="/authUser/popular">Popular</a></li>
+		<li><a aria-current="{segment === 'transaction' ? 'page' : undefined}" href="/authUser/transaction">New Transaction</a></li>
+        <li><ProfileDropdown/></li>
+		<li><a href="/"  rel=prefetch>Home</a></li>
+		<li><a href="login" rel=prefetch>Login</a></li>
+		<li><a href="login?signup=1" rel=prefetch>SignUp</a></li>
+		<!--<li><a href="profile" rel=prefetch>Profile</a></li>-->
 
 		<!-- for the blog link, we're using rel=prefetch so that Sapper prefetches
 		     the blog data when we hover over the link or tap it on a touchscreen -->

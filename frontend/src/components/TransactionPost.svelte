@@ -1,14 +1,64 @@
 <script>
-  let userLogo = "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50";
-  let cryptoLogo = "https://s3.amazonaws.com/logos.brandpa.com/uploads/0d56d34d5b9d03d82a25c9e4be00ce89/SuniCoin.png";
-  let cryptoName = "SuniCoin";
-  let userName = "John Doe";
-  let transactionType = "Bought";
-  let transactionTime = "5:03pm";
-  let transactionDate = "10/4/20";
-  let username = "johnDoe";
-  let transactionCaption = "Just bought this great new cryptocurrency!";
-  let likeStatus = "Like";
+  import { goto,stores } from '@sapper/app';
+  import firebase from 'firebase/app';
+  export let username;
+  export let userLogo;
+  export let cryptoLogo;
+  export let cryptoName;
+  export let transactionType;
+  export let transactionTime;
+  export let transactionDate;
+  export let transactionCaption;
+  export let isLiked = false;
+  export let likeId;
+  export let likeCount; 
+  export let amount;
+  export let currentUid;
+  export let transId;
+  export let comments;
+  var commentInput;
+
+  async function handleComment(id) {
+    db.collection("comments").add({
+        uid: currentUid,
+        transid: id,
+        comment: commentInput,
+        time : firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then(function(docRef) {
+        console.log("Comment document written with ID: ", docRef.id);
+        location.reload();
+      })
+      .catch(function(error) {
+        console.error("Error adding document: ", error);
+      });
+    return false;
+  }
+
+  async function handleLike(id) {
+    if (!isLiked) {
+      db.collection("likes").add({
+        uid: currentUid,
+        transid: id
+      })
+      .then(function(docRef) {
+        likeId = docRef.id;
+        console.log("Document written with ID: ", docRef.id);
+      })
+      .catch(function(error) {
+        console.error("Error adding document: ", error);
+      });
+      likeCount += 1;
+    } else {
+      db.collection("likes").doc(likeId).delete().then(function() {
+        console.log("Document successfully deleted!");
+      }).catch(function(error) {
+          console.error("Error removing document: ", error);
+      });
+      likeCount -=1;
+    }
+    isLiked = !isLiked;
+  }
 
 </script>
 
@@ -17,38 +67,50 @@
 	<table class = 'transaction-header'>
 		<tr>
 			<th class ='transaction-profile-pic'>
-				<a href = "/authUser/profile"><img class = "feed-avatar" src = '{userLogo}' alt = 'User Avatar'></a>
+				<a href = "profile/{username}"><img class = "feed-avatar" src = '{userLogo}' alt = 'User Avatar'></a>
 			</th>
-			<th class ='transaction-name'>
-				<a class = "username-link" href = "/authUser/profile">{userName}</a>
-			</th>
-			<th class = 'transaction-date'>
+			<td class ='transaction-name'>
+				<a class = "username-link" href = "profile/{username}">{username}</a>
+			</td>
+			<td class = 'transaction-date'>
 				{transactionTime}
           <br>
         {transactionDate}
-			</th>
+			</td>
 		</tr>
 	</table>
 
-	<p>{transactionType} <a class = 'crypto-link' href = "/authUser/cryptocurrency">{cryptoName}</a>.</p>
+	<p class = "transaction-description">{transactionType} ${amount} of <a class = 'crypto-link' href = "/authUser/cryptocurrency">{cryptoName}</a>.</p>
 			<a href = "/authUser/cryptocurrency">
 				<img src = '{cryptoLogo}' class = 'transaction-logo' alt = 'cryptologo'>
 			<br></a>
               
-	<p class = 'transaction-caption'> <a class = "username-caption-link" href = "/authUser/profile"><b> @{username}: </b></a>{transactionCaption}</p>
-
+	<p class = 'transaction-caption'> <a class = "username-caption-link" href = "profile/{username}"> @{username}: </a>{transactionCaption}</p>
+  <p class = 'transaction-caption'>{likeCount} likes</p>
 	<table class = 'like-and-comment'>
+    <tr>
+      <td colspan = 2;>
+        <p class = "transaction-description">Comments</p>
+      </td>
+    </tr>
+    {#each comments as comment}
+      <tr>
+        <td colspan = 2;>
+          <p class = 'comment'><a class = "username-caption-link" href = "profile/{comment.username}"> @{comment.username}: </a>{comment.comment}</p>
+        </td>
+      </tr>
+    {/each}
 		<tr>
 			<td style = 'width: 25px;'>
-				<button class = 'like-button'>{likeStatus}</button>
+				<button class = 'like-button' on:click = {handleLike(transId)}>{(isLiked) ? 'Unlike': "Like"}</button>
 			</td>
 			<td>
-				<form class="comment-box" name="comment-box">
-			<textarea class="comment-input" id="comment-input" placeholder="Leave a comment"></textarea>
-				<input type="submit"/>
+				<form class="comment-box" name="comment-box" on:submit|preventDefault = {handleComment(transId)}>
+			    <textarea class="comment-input" id="comment-input" placeholder="Leave a comment" bind:value = {commentInput}></textarea>
+				  <input type="submit"/>
 				</form>
 			</td>
-		</tr>
+    </tr>
 	</table>
 </div>
 
@@ -59,21 +121,27 @@
     margin: auto;
     text-align: left;
     background-color: hsl(0, 0%, 100%);
+    outline: solid 1px;
     outline-color: hsl(0, 0%, 95%);
     padding: 10px;
+    
   }
 
   .username-link {
     font-family: inherit;
-    color: hsl(210, 35%, 20%);
+    color: hsl(210, 35%, 40%);
     text-align: center;
     padding-top: 5pt;
     text-decoration: none;
-    font-size: 25px;
+    font-size: 20px;
   }
 
   .username-link:hover {
-    color: hsl(210, 35%, 50%);
+    color: hsl(210, 35%, 70%);
+  }
+
+  .transaction-description {
+    font-size: 16px;
   }
 
   .crypto-link {
@@ -113,22 +181,27 @@
     font-size: 12px;
     font-family: inherit;
     color: hsl(210, 35%, 50%);
+    white-space: nowrap;
   }
 
   .transaction-caption {
-    font-size: 12px;
+    font-size: 14px;
     text-decoration: none;
   }
 
+  .comment {
+    font-size: 12px;
+    text-decoration: none;
+  }
   .username-caption-link {
-    color: hsl(210, 35%, 20%);
+    color: hsl(210, 35%, 40%);
     text-align: center;
     padding-top: 5pt;
     text-decoration: none;
   }
 
   .username-caption-link:hover {
-    color: hsl(210, 35%, 50%);
+    color: hsl(210, 35%, 70%);
   }
 
   /* Like button */
@@ -145,7 +218,8 @@
 
   .like-button:hover {
     cursor: pointer;
-    background-color: rgba(133, 132, 132, 0.356);
+    border-color: hsl(210, 35%, 70%);
+    color: hsl(210, 35%, 70%);
   }
 
   /* Leave a comment box */
@@ -155,6 +229,7 @@
     border-collapse: collapse;
     border-spacing: 0;
     text-align: left;
+    padding: 0px;
   }
 
   form {
@@ -190,7 +265,8 @@
 
   input:hover {
     cursor: pointer;
-    background-color: rgba(133, 132, 132, 0.356);
+    border-color: hsl(210, 35%, 70%);
+    color: hsl(210, 35%, 70%);
   }
 
   img {
@@ -198,7 +274,7 @@
     margin-left: auto;
     margin-right: auto;
     height: auto;
-    max-width: 70%;
+    max-width: 200px;
     min-width: 50px;
   }
 </style>

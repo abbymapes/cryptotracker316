@@ -2,7 +2,6 @@
     import { goto,stores } from '@sapper/app';
     import firebase from 'firebase/app';
     import {onMount} from 'svelte';
-    export let segment;
 
     let email = '';
     let password = '';
@@ -15,13 +14,14 @@
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then( res => {
                 waiting = true; 
-                goto('/profile');
+                goto('/authUser/feed');
             })
             .catch( e =>{
-
                 console.log(e);
             })
     }
+
+    // test
 
     async function logout() {
          firebase.auth().signOut()
@@ -44,9 +44,11 @@
                         uid:res.user.uid,
                         email:res.user.email,
                         createdOn: firebase.firestore.FieldValue.serverTimestamp(),
-                        username: username
+                        username: username,
+                        picture: 'https://www.alliancerehabmed.com/wp-content/uploads/icon-avatar-default.png',
+                        balance: 1000
                     })
-                    goto('/profile');
+                    goto('/authUser/feed');
                 })
                 .catch( e =>{
                     console.log(e);
@@ -66,17 +68,20 @@
     }
     onMount(()=>{
         first = false;
-
+        console.log(session.user)
+        if ($session.user) {
+            goto('/authUser/feed');
+        }
     })
 
 $: username , isunique()
 
 </script>
 {#if waiting}
-waiting
+    Waiting...
 {:else}
 {#if $session.user}
-<button on:click={logout}>Logout</button>    
+    <button on:click={logout}>Logout</button>    
 {:else }
 
     <h1> {#if $page.query.signup}
