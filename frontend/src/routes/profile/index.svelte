@@ -1,5 +1,5 @@
 <script context="module">
-    import {firestore,auth} from './../../firebase'
+
 	export async function preload(page, session) {
         let { user,ux } = session;
         if (!user || ux===undefined) {

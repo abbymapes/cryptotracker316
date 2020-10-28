@@ -1,7 +1,7 @@
 <script>
   import TransactionPost from '../../components/TransactionPost.svelte';
   import { onMount } from "svelte";
-  import firebase from 'firebase/app'
+  
 
   var searchInput
   var selectedType

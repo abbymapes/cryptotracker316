@@ -11,7 +11,7 @@
       ret[res.data.base] = res.data.amount
     }))
     return {x:ret}
-  }
+  } 
 </script>
 
 <script>

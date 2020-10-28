@@ -1,8 +1,12 @@
 <script>
 	export let segment;
 	import ProfileDropdown from '../components/ProfileDropdown.svelte';
+	import { stores } from '@sapper/app';
+
+
+    const { session } = stores();
 	console.log(segment);
-	$: active = (segment.includes("authUser") || segment.includes("profile")  == true);
+	$: active = (segment.includes("authUser") );
 </script>
 
 
@@ -16,8 +20,13 @@
 			<li><ProfileDropdown/></li>
 		{:else}
 			<li><a href="/"  rel=prefetch>Home</a></li>
+			{#if $session.user }	
+			<li><a href="profile" rel=prefetch>Profile</a></li>
+			<li><a href="/authUser/feed" rel=prefetch>Feed</a></li>
+			{:else}
 			<li><a href="login" rel=prefetch>Login</a></li>
 			<li><a href="login?signup=1" rel=prefetch>Sign Up</a></li>
+			{/if}
 			<!--<li><a href="profile" rel=prefetch>Profile</a></li>-->
 		{/if}
 

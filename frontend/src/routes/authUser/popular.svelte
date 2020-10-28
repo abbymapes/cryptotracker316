@@ -1,7 +1,7 @@
 <script>
   import TransactionPost from '../../components/TransactionPost.svelte';
   import { onMount } from "svelte";
-  import firebase from 'firebase/app';
+
     onMount(()=>{
       const db =  firebase.firestore()
       db.collection("test").get().then(snap =>{

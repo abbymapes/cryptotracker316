@@ -1,6 +1,6 @@
 <script>
     import { goto,stores } from '@sapper/app';
-    import firebase from 'firebase/app';
+ 
     import {onMount} from 'svelte';
 
     let email = '';
@@ -48,7 +48,7 @@
                         picture: 'https://www.alliancerehabmed.com/wp-content/uploads/icon-avatar-default.png',
                         balance: 1000
                     })
-                    goto('/authUser/feed');
+                    goto(`/profile/${username}`);
                 })
                 .catch( e =>{
                     console.log(e);

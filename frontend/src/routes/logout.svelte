@@ -1,6 +1,6 @@
 <script>
 	import { goto,stores } from '@sapper/app';
-    import firebase from 'firebase/app';
+   
     import {onMount} from 'svelte';
 
     const {session} = stores()

@@ -1,6 +1,6 @@
 <script>
   import TransactionPost from '../../components/TransactionPost.svelte';
-  import firebase from 'firebase/app';
+  
   import {onMount} from 'svelte';
 
   let loading = true;

@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { stores } from '@sapper/app';
     import Cookies from 'js-cookie';
-	import firebase from 'firebase/app'
+
     import Nav from './../components/Nav.svelte'
 
     const { session ,page} = stores();

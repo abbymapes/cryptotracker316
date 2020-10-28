@@ -1,6 +1,6 @@
 <script>
   import { goto,stores } from '@sapper/app';
-  import firebase from 'firebase/app';
+
   export let username;
   export let userLogo;
   export let cryptoLogo;

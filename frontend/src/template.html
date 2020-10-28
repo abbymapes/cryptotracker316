@@ -24,10 +24,34 @@
 	<!-- This contains the contents of the <svelte:head> component, if
 	     the current page has one -->
 	%sapper.head%
+
+	
 </head>
 <body>
 	<!-- The application will be rendered inside this element,
 	     because `src/client.js` references it -->
 	<div id="sapper">%sapper.html%</div>
+
+	<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+	<!-- Add Firebase products that you want to use -->
+	<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
+	<script>
+		
+		const firebaseConfig = {
+			apiKey: "AIzaSyBn1zdf5LjWRSAw0EtkNkErWWURq8F_czU",
+			authDomain: "cryptotracker316.firebaseapp.com",
+			databaseURL: "https://cryptotracker316.firebaseio.com",
+			projectId: "cryptotracker316",
+			storageBucket: "cryptotracker316.appspot.com",
+			messagingSenderId: "765438654978",
+			appId: "1:765438654978:web:0eb4df6fec97e0ccd3051b",
+			measurementId: "G-N9G8PYBQSM"
+		};
+
+  		firebase.initializeApp(firebaseConfig)
+	</script>
 </body>
 </html>
