@@ -69,34 +69,34 @@
 			<th class ='transaction-profile-pic'>
 				<a href = "profile/{username}"><img class = "feed-avatar" src = '{userLogo}' alt = 'User Avatar'></a>
 			</th>
-			<th class ='transaction-name'>
+			<td class ='transaction-name'>
 				<a class = "username-link" href = "profile/{username}">{username}</a>
-			</th>
-			<th class = 'transaction-date'>
+			</td>
+			<td class = 'transaction-date'>
 				{transactionTime}
           <br>
         {transactionDate}
-			</th>
+			</td>
 		</tr>
 	</table>
 
-	<p>{transactionType} ${amount} of <a class = 'crypto-link' href = "/authUser/cryptocurrency">{cryptoName}</a>.</p>
+	<p class = "transaction-description">{transactionType} ${amount} of <a class = 'crypto-link' href = "/authUser/cryptocurrency">{cryptoName}</a>.</p>
 			<a href = "/authUser/cryptocurrency">
 				<img src = '{cryptoLogo}' class = 'transaction-logo' alt = 'cryptologo'>
 			<br></a>
               
-	<p class = 'transaction-caption'> <a class = "username-caption-link" href = "profile/{username}"><b> @{username}: </b></a>{transactionCaption}</p>
+	<p class = 'transaction-caption'> <a class = "username-caption-link" href = "profile/{username}"> @{username}: </a>{transactionCaption}</p>
   <p class = 'transaction-caption'>{likeCount} likes</p>
 	<table class = 'like-and-comment'>
     <tr>
-      <th colspan = 2;>
-        <p>Comments</p>
-      </th>
+      <td colspan = 2;>
+        <p class = "transaction-description">Comments</p>
+      </td>
     </tr>
     {#each comments as comment}
       <tr>
         <td colspan = 2;>
-          <p class = 'comment'><a class = "username-caption-link" href = "profile/{comment.username}"><b> @{comment.username}: </b></a>{comment.comment}</p>
+          <p class = 'comment'><a class = "username-caption-link" href = "profile/{comment.username}"> @{comment.username}: </a>{comment.comment}</p>
         </td>
       </tr>
     {/each}
@@ -121,21 +121,27 @@
     margin: auto;
     text-align: left;
     background-color: hsl(0, 0%, 100%);
+    outline: solid 1px;
     outline-color: hsl(0, 0%, 95%);
     padding: 10px;
+    
   }
 
   .username-link {
     font-family: inherit;
-    color: hsl(210, 35%, 20%);
+    color: hsl(210, 35%, 40%);
     text-align: center;
     padding-top: 5pt;
     text-decoration: none;
-    font-size: 25px;
+    font-size: 20px;
   }
 
   .username-link:hover {
-    color: hsl(210, 35%, 50%);
+    color: hsl(210, 35%, 70%);
+  }
+
+  .transaction-description {
+    font-size: 16px;
   }
 
   .crypto-link {
@@ -179,7 +185,7 @@
   }
 
   .transaction-caption {
-    font-size: 12px;
+    font-size: 14px;
     text-decoration: none;
   }
 
@@ -188,14 +194,14 @@
     text-decoration: none;
   }
   .username-caption-link {
-    color: hsl(210, 35%, 20%);
+    color: hsl(210, 35%, 40%);
     text-align: center;
     padding-top: 5pt;
     text-decoration: none;
   }
 
   .username-caption-link:hover {
-    color: hsl(210, 35%, 50%);
+    color: hsl(210, 35%, 70%);
   }
 
   /* Like button */
@@ -212,7 +218,8 @@
 
   .like-button:hover {
     cursor: pointer;
-    background-color: rgba(133, 132, 132, 0.356);
+    border-color: hsl(210, 35%, 70%);
+    color: hsl(210, 35%, 70%);
   }
 
   /* Leave a comment box */
@@ -258,7 +265,8 @@
 
   input:hover {
     cursor: pointer;
-    background-color: rgba(133, 132, 132, 0.356);
+    border-color: hsl(210, 35%, 70%);
+    color: hsl(210, 35%, 70%);
   }
 
   img {

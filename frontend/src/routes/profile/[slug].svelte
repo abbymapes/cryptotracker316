@@ -37,7 +37,6 @@ class User {
         console.log("Uname changed")
         loading = true
         mount()
-
     }
 
     let kaijen 
