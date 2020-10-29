@@ -83,7 +83,6 @@ class User {
         .get()
         .then(snap=>{
             snap.forEach(doc=>{
-             // console.log(trades)
                 trades = [...trades,doc.data()]
                 console.log(doc.data().time.seconds)
             })
