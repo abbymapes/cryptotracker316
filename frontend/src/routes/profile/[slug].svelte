@@ -3,7 +3,10 @@
         const { slug } = page.params;
         let { user,ux } = session;
         let falcon = slug==ux
-        return { falcon }
+        console.log(slug)
+        console.log(user)
+        console.log(ux)
+        return {uname : slug, ux, falcon}
     }
 </script>
 <script>
@@ -18,7 +21,6 @@ class User {
       this.bio = bio || ""
     }
   }
- 
     import { goto,stores } from '@sapper/app';
     import { onMount } from "svelte";
     import Trade from '../../components/Trade.svelte';
@@ -26,13 +28,25 @@ class User {
 
     const { page,session} = stores();
     const { slug } = $page.params;
-    let uname = slug
+    export let uname = slug
     export let falcon = false
+    export let ux = ""
 
     let currentUid
     let user
+    var followId
     let trades = []
     let edit = false
+    var isFollowed = false
+    let loading = true
+
+    $: loading = (trades.count > 0)
+
+    $: if (uname) {
+        console.log("uname changed " + uname)
+        loading = true
+        mount()
+    }
 
     async function logout() {
         return firebase.auth().signOut().then(() => {
@@ -42,7 +56,7 @@ class User {
 
     onMount(async ()=>{
       await mount()
-     await  getTrades()
+      await getTrades()
     })
 
 
@@ -58,6 +72,8 @@ class User {
         })
         .then(() => {
            console.log(currentUid, user)
+       }).then(() => {
+          getFollowStatus(currentUid, user.uid)
        })
   }
 
@@ -73,6 +89,50 @@ class User {
             })
         })
   }
+
+  async function getFollowStatus(currentUid, otherUid){
+    let db = firebase.firestore()
+    var id
+    var user = await db.collection("follows").where("uidFollower", "==", currentUid).where("uidFollowing", "==", otherUid).get().then(function(snap) {
+      snap.forEach(function(item) {
+        isFollowed = true
+        followId = item.id
+      })
+    });
+    if (!isFollowed) {
+        followId = null
+    }
+    return id;
+  }
+
+  async function handleFollow(currentUid, otherUser) {
+    let db = firebase.firestore()
+    if (!loading) {
+        if (!isFollowed) {
+            db.collection("follows").add({
+                uidFollower: currentUid,
+                uidFollowing: otherUser
+            })
+            .then(function(docRef) {
+                console.log("Follows document written with ID: ", docRef.id);
+                followId = docRef.id
+            })
+            .catch(function(error) {
+                console.error("Error adding follows document: ", error);
+            });
+        } else {
+            if (followId) {
+                db.collection("follows").doc(followId).delete().then(function() {
+                    console.log("Follow document successfully deleted!");
+                    followId = null
+                }).catch(function(error) {
+                    console.error("Error removing document: ", error);
+                });
+            }
+        }
+        isFollowed = !isFollowed
+    }
+  }
   
 </script>
 
@@ -80,28 +140,41 @@ class User {
     <title>Profile</title>
 </svelte:head>
 <div class="content">
-  {#if user}
-<h1> {uname}  </h1> 
-{#if falcon}
-<button on:click={logout} > Logout</button>
-<button on:click={()=> edit = !edit} > Edit Profile</button>
-Balance: {user.balance}
-{/if}
+  {#if loading}
+    <p> Loading </p>
+  {:else}
+    {#if user}
+      <div>
+        <div class="image" style={`background-image: url('${user.picture}')`}></div>
+        <h1> {uname}  </h1> 
+        <p style="text-align:center">{user.bio}</p>
+        {#if falcon}
+          <button on:click={logout} > Logout</button>
+          <button on:click={()=> edit = !edit} > Edit Profile</button>
+          Balance: {user.balance}
+        {:else}
+          <button class = 'follow-button' on:click = {handleFollow(currentUid, user.uid)}>{(isFollowed) ? 'Unfollow': "Follow"}</button>
+        {/if}
+      </div>
+      <br>
 
-<div class="image" style={`background-image: url('${user.picture}')`}></div>
-<p style="text-align:center">{user.bio}</p>
-  <h2>Trades</h2>
-  {#if trades}
-    {#each trades as trade }
-      <Trade {trade} name={user.username} />
-    {/each}
+      <div>
+      <div class="header"><h1>Trades</h1></div>
+      {#if trades}
+        {#each trades as trade }
+          <Trade {trade} name={user.username} />
+        {/each}
+      {/if}
+      <br>
+      </div>
+    {/if}
   {/if}
-{/if}
 </div>
 
 {#if edit}
-<Editor img={user.picture} bio={user.bio} bind:edit uid={user.uid}/>
+  <Editor img={user.picture} bio={user.bio} bind:edit uid={user.uid}/>
 {/if}
+
 <style>
 .image{
   width: 200px;

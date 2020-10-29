@@ -6,7 +6,7 @@
 
     const { session } = stores();
 
-	$: active = (segment.includes("authUser") );
+	$: active = (segment.includes("authUser") || segment.includes("profile") );
 </script>
 
 
@@ -21,7 +21,6 @@
 		{:else}
 			<li><a href="/"  rel=prefetch>Home</a></li>
 			{#if $session.user }	
-			<li><a href="profile" rel=prefetch>Profile</a></li>
 			<li><a href="/authUser/feed" rel=prefetch>Feed</a></li>
 			{:else}
 			<li><a href="login" rel=prefetch>Login</a></li>
