@@ -1,28 +1,15 @@
-<script context="module">
-  const currencies = ["BTC","ETH","LTC"]
-
-	export async function preload(page, session) {
-    let ret = {}
-    let requests = []
-    for(let i = 0 ; i < 3; i++)
-      requests = [...requests, this.fetch(`https://api.coinbase.com/v2/prices/${currencies[i]}-USD/spot`)] 
-    await Promise.all(requests.map(async r => {
-      const res = await (await r).json();
-      ret[res.data.base] = res.data.amount
-    }))
-    return {x:ret}
-  } 
-</script>
-
 <script>
-  export let x;
-  $: console.log(x)
+  
+  import { stores } from '@sapper/app';
+  const currencies = ["BTC","ETH","LTC"]
+  const { session } = stores();
+
 </script>
 
 <div class="bar">
   {#each currencies as y}
     <span>
-      {y} {#if x} ${x[y]} {/if}
+      {y} {#if $session.prices} ${$session.prices[y]} {/if}
     </span>
   {/each}
 </div>

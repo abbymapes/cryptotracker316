@@ -5,7 +5,7 @@
 
 
     const { session } = stores();
-	console.log(segment);
+
 	$: active = (segment.includes("authUser") );
 </script>
 

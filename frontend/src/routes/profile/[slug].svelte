@@ -10,15 +10,14 @@
 
 class User {
     constructor (uid, username, email, balance, picture, bio) {
-        this.uid = uid;
-        this.username = username;
-        this.balance = balance;
-        this.email = email;
-        this.picture = picture;
-        this.bio = bio || ""
+      this.uid = uid;
+      this.username = username;
+      this.balance = balance;
+      this.email = email;
+      this.picture = picture;
+      this.bio = bio || ""
     }
-
-}
+  }
  
     import { goto,stores } from '@sapper/app';
     import { onMount } from "svelte";
@@ -55,7 +54,7 @@ class User {
                 user = new User(doc.data().uid, doc.data().username, doc.data().email, doc.data().balance, doc.data().picture,doc.data().bio)
             })
         }).then(()=> {
-            currentUid = firebase.auth().currentUser.uid
+            currentUid = firebase.auth().currentUser ? firebase.auth().currentUser.uid : undefined
         })
         .then(() => {
            console.log(currentUid, user)

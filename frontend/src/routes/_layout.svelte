@@ -1,3 +1,18 @@
+<script context="module">
+    const currencies = ["BTC","ETH","LTC"]
+  
+      export async function preload(page, session) {
+      session.prices = {}
+      let requests = []
+      for(let i = 0 ; i < 3; i++)
+        requests = [...requests, this.fetch(`https://api.coinbase.com/v2/prices/${currencies[i]}-USD/spot`)] 
+      await Promise.all(requests.map(async r => {
+        const res = await (await r).json();
+        session.prices[res.data.base] = res.data.amount
+      }))
+      return
+    } 
+  </script>
 <script>
     import { onMount } from 'svelte';
     import { stores } from '@sapper/app';
@@ -8,7 +23,7 @@
     const { session ,page} = stores();
 
      onMount(async () => {
-
+            console.log($session.prices)
         firebase.auth().onIdTokenChanged(async (user) => {
             try {
                 if (!user) {

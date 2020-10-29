@@ -2,7 +2,7 @@
 
 	export async function preload(page, session) {
         let { user,ux } = session;
-        if (!user || ux===undefined) {
+        if (!user ) {
             return this.redirect(302, '/login');
         }
 
