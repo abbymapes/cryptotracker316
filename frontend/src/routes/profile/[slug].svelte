@@ -87,7 +87,7 @@ class User {
 <button on:click={()=> edit = !edit} > Edit Profile</button>
 Balance: {user.balance}
 {/if}
-
+<a href="/profile/johndoe"> l</a>
 <div class="image" style={`background-image: url('${user.picture}')`}></div>
 <p style="text-align:center">{user.bio}</p>
   <h2>Trades</h2>
