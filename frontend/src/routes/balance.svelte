@@ -1,6 +1,36 @@
 <script>
-	
-  let balance = 1000;
+    import { onMount } from 'svelte';
+	import firebase from 'firebase/app'
+
+
+onMount(()=>{
+	firebase.auth().onAuthStateChanged(function(user) {
+  		if (user) {
+			var docRef = firebase.firestore().collection("users").doc(user.uid);
+
+			docRef.get().then(function(doc) {
+    		if (doc.exists) {
+			console.log("Document data:", doc.data());
+			balance = doc.data().balance;
+			console.log(balance)
+
+    		} else {
+        	// doc.data() will be undefined in this case
+        	console.log("No such document!");
+    		}
+			}).catch(function(error) {
+    		console.log("Error getting document:", error);
+			});
+
+    // User is signed in.
+  		} else {
+    // No user is signed in.
+  	}
+});
+})
+
+
+  let balance;
   let numbers = 500;
   let yes = false;
   let questions = [
@@ -15,13 +45,19 @@
 </script>
 
 <style>
+	.center{
+		align-items: center;
+		display: flex;
+		flex-direction: column;
+	}
+
   p {
 		color: black;
 		font-family: 'Arial';
 		font-size: 2em;
     align-items: center;
 	}
-  input { display: block; width: 2672px; max-width: 100%;}
+  input { display: block; width: 300px; max-width: 100%;}
   button {
 		height: 4rem;
 		width: 32rem;
@@ -39,6 +75,7 @@
 	}
 </style>
 
+<div class='center'>
 <h1> <title>Balance</title> </h1>
 <p> BALANCE = ${balance} </p>
 
@@ -59,3 +96,4 @@
 {:else} <h3>You must check box to continue.</h3>
 {/if} <button disabled={!yes} on:click|preventDefault={addNumber }>Add ${numbers} to balance</button>
 
+</div>

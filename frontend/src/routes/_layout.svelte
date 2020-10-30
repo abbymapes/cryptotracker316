@@ -12,7 +12,6 @@
         firebase.auth().onIdTokenChanged(async (user) => {
             try {
                 if (!user) {
-                  
                     Cookies.set('token', false);
                     $session.user = false;
                     return;
