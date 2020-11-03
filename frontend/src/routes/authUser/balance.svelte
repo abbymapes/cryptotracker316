@@ -1,11 +1,13 @@
 <script>
-    import { onMount } from 'svelte';
-	import firebase from 'firebase/app'
-
+let selected = 	{ id: 1, text: `Add Balance` };
+$: console.log(selected)
+import { onMount } from 'svelte';	
+let u;
 
 onMount(()=>{
 	firebase.auth().onAuthStateChanged(function(user) {
   		if (user) {
+			  u = user.uid;
 			var docRef = firebase.firestore().collection("users").doc(user.uid);
 
 			docRef.get().then(function(doc) {
@@ -26,22 +28,72 @@ onMount(()=>{
   		} else {
     // No user is signed in.
   	}
-});
-})
-
+	});
+	})
 
   let balance;
-  let numbers = 500;
+  let numbers;
   let yes = false;
   let questions = [
 		{ id: 1, text: `Add Balance` },
 		{ id: 2, text: `Withdraw balance` },
 	];
-	let selected;
-  function addNumber() {
-    balance += numbers;
+	
+function addNumber() {
+	balance += numbers;
+	var sfDocRef = firebase.firestore().collection("users").doc(u);
+	return firebase.firestore().runTransaction(function(transaction) {
+    return transaction.get(sfDocRef).then(function(sfDoc) {
+        if (!sfDoc.exists) {
+            throw "Document does not exist!";
+        }
+		var newBalance = sfDoc.data().balance + numbers;
+		if (newBalance >= 0) {
+            transaction.update(sfDocRef, { balance: newBalance });
+            return newBalance;
+        } else {
+            return Promise.reject("Transaction Failed");
+        }
+    });
+
+	}).then(function() {
+    	alert("Transaction successfully committed!");
+	}).catch(function(error) {
+    	alert("Transaction failed: Not Enough balance!", error);
+	});
     alert('Balance Added!');
 	}
+
+function subNumber() {
+	if(balance - numbers >= 0){
+		balance -= numbers;
+	}
+	var sfDocRef = firebase.firestore().collection("users").doc(u);
+
+	return firebase.firestore().runTransaction(function(transaction) {
+    return transaction.get(sfDocRef).then(function(sfDoc) {
+        if (!sfDoc.exists) {
+            throw "Document does not exist!";
+        }
+
+		var newBalance = sfDoc.data().balance - numbers;
+		if (newBalance >= 0) {
+            transaction.update(sfDocRef, { balance: newBalance });
+            return newBalance;
+        } else {
+            return Promise.reject("Transaction Failed");
+        }
+    });
+
+	}).then(function() {
+    alert("Transaction successfully committed!");
+	}).catch(function(error) {
+    alert("Transaction failed: ", error);
+	});
+	}
+
+
+
 </script>
 
 <style>
@@ -94,6 +146,9 @@ onMount(()=>{
 <input type=checkbox bind:checked={yes}> <h6>Check box to continue adding balance.</h6>
 {#if yes} <h3>Thank you. Click button to continue.</h3>
 {:else} <h3>You must check box to continue.</h3>
-{/if} <button disabled={!yes} on:click|preventDefault={addNumber }>Add ${numbers} to balance</button>
+{/if} 
+{#if selected.id ==1}<button disabled={!yes} on:click|preventDefault={addNumber }>Add ${numbers} to balance</button>
+{:else} <button disabled={!yes} on:click|preventDefault={subNumber }>Withdraw ${numbers} from balance</button>
+{/if}
 
 </div>
