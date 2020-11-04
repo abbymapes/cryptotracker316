@@ -40,6 +40,7 @@
                 .then( async res => {
                     waiting = true;
                     await firebase.database().ref(`/usernames/${username}`).set(res.user.uid)
+                    await firebase.database().ref(`/uids/${res.user.uid}`).set(username)
                     await firebase.firestore().collection('users').doc(res.user.uid).set({
                         uid:res.user.uid,
                         email:res.user.email,

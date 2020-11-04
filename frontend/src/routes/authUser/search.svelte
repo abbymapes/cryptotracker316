@@ -21,6 +21,7 @@
   })
 
   async function handleSearch(){
+    const db =  firebase.firestore()
     loading = true
     console.log(searchInput)
     console.log(selectedType)

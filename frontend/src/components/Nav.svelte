@@ -4,12 +4,12 @@
 	import { stores } from '@sapper/app';
 
 
-    const { session } = stores();
-
-	$: active = (segment.includes("authUser") );
+    const { session, page } = stores();
+	console.log($page.path.split('/')[1])
+	$: active = (segment.includes("authUser") || segment.includes("profile") );
 </script>
 
-
+{#if $page.path.split('/')[1] != 'profile'}
 <nav>
 	<ul>
 		{#if active}
@@ -21,8 +21,8 @@
 		{:else}
 			<li><a href="/"  rel=prefetch>Home</a></li>
 			{#if $session.user }	
-			<li><a href="profile" rel=prefetch>Profile</a></li>
 			<li><a href="/authUser/feed" rel=prefetch>Feed</a></li>
+			<li><a href="/profile" rel=prefetch> Profile</a></li>
 			{:else}
 			<li><a href="login" rel=prefetch>Login</a></li>
 			<li><a href="login?signup=1" rel=prefetch>Sign Up</a></li>
@@ -35,7 +35,7 @@
 		<!-- <li><a rel=prefetch aria-current="{segment === 'blog' ? 'page' : undefined}" href="blog">blog</a></li>-->
 	</ul>
 </nav>
-
+{/if}
 <style>
 	nav {
 		border-bottom: 1px solid rgba(255,62,0,0.1);

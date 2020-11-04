@@ -6,11 +6,28 @@ const db = admin.firestore();
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
-// exports.newUser = functions.auth.user().onCreate((user) => {
-//     db.collection('users').doc(user.uid).set({
-//         uid:user.uid,
-//         email:user.email,
-//         createdOn:admin.firestore.FieldValue.serverTimestamp()
-//     });
-//   });
+exports.newLike = functions.firestore
+    .document('likes/{likeId}')
+    .onCreate(async (snap, context) => {
+      // Get an object representing the document
+      // e.g. {'name': 'Marie', 'age': 66}
+      const toLike = snap.data().transid
+      await db.collection('transaction').doc(toLike)
+        .update({
+            like_count: admin.firestore.FieldValue.increment(1)
+        });
+      // perform desired operations ...
+    });
 
+exports.delLike = functions.firestore
+    .document('likes/{likeId}')
+    .onDelete(async (snap, context) => {
+      // Get an object representing the document
+      // e.g. {'name': 'Marie', 'age': 66}
+      const toLike = snap.data().transid
+      await db.collection('transaction').doc(toLike)
+        .update({
+            like_count: admin.firestore.FieldValue.increment(-1)
+        });
+      // perform desired operations ...
+    });
