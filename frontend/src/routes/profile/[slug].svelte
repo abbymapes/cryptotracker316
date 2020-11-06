@@ -31,6 +31,7 @@ class User {
     export let uname = slug
     export let falcon = false
     export let ux = ""
+    export let loggedIn = false
 
     let currentUid
     let user
@@ -46,11 +47,12 @@ class User {
     $: loading = (trades.count > 0)
 
     $: if(uname) updater() 
+
     async function updater() {
        console.log("uname changed " + uname)
         loading = true
         await mount()
-       await  getTrades()
+        await  getTrades()
     }
 
     async function logout() {
@@ -74,6 +76,9 @@ class User {
             })
         }).then(()=> {
             currentUid = firebase.auth().currentUser ? firebase.auth().currentUser.uid : undefined
+            if (currentUid) {
+              loggedIn = true
+            }
         })
         .then(() => {
          //  console.log(currentUid, user)
@@ -98,14 +103,16 @@ class User {
   async function getFollowStatus(currentUid, otherUid){
     let db = firebase.firestore()
     var id
-    await db.collection("follows").where("uidFollower", "==", currentUid).where("uidFollowing", "==", otherUid).get().then(function(snap) {
+    if (currentUid) {
+      await db.collection("follows").where("uidFollower", "==", currentUid).where("uidFollowing", "==", otherUid).get().then(function(snap) {
       snap.forEach(function(item) {
         isFollowed = true
         followId = item.id
-      })
-    });
-    if (!isFollowed) {
+        })
+      });
+      if (!isFollowed) {
         followId = null
+      }
     }
     return id;
   }
@@ -163,7 +170,7 @@ class User {
 {/if}
 <main>
   <div class="menu">
-    <Leftbar {falcon}/>
+    <Leftbar {falcon} {loggedIn}/>
   </div>
   <div class="trades">
     <h1>Trades</h1>
@@ -195,7 +202,9 @@ class User {
       {#if falcon}
       <b>Availiable Balance: <br> ${user.balance}</b>
     {:else}
-      <button class = 'follow-button' on:click = {handleFollow(currentUid, user.uid)}>{(isFollowed) ? 'Unfollow': "Follow"}</button>
+      {#if loggedIn}
+        <button class = 'follow-button' on:click = {handleFollow(currentUid, user.uid)}>{(isFollowed) ? 'Unfollow': "Follow"}</button>
+      {/if}
     {/if}
   </div>
     {/if}
@@ -245,7 +254,6 @@ main{
 }
 .trades{
   position: relative;
-   
     margin-top: 25px;
     border-radius: 25px 25px 0px 0px;
     display: flex;

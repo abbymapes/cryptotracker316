@@ -1,5 +1,6 @@
 <script>
-  import TransactionPost from '../../components/TransactionPost.svelte';
+  import TransactionPost from '../components/TransactionPost.svelte';
+  import Leftbar from "../components/Leftbar.svelte";
   
   import {onMount} from 'svelte';
   import { stores } from '@sapper/app';
@@ -8,17 +9,21 @@
 
   let loading = true;
   export var posts = [];
-  export let followingIds = [];
   export let currentUsername
+  export let falcon = false
+  export let loggedIn = false
   let currentUser
   let currentUid
 
   $: if ($session.ux) {
     currentUsername = $session.ux
+    loggedIn = true
     mount()
   }
 
   onMount(async()=>{
+    currentUid = "NotLoggedIn"
+    getData()
   })
 
   async function mount() {
@@ -52,9 +57,7 @@
   async function getData() {
     const db =  firebase.firestore();
     var userPosts = [];
-    getFollowingUsers(db, currentUid).then(function() {
-      if (followingIds.length > 0) {
-        db.collection("transaction").where("uid", "in", followingIds).orderBy("time", "desc").get().then(function(snap) {
+      db.collection("transaction").orderBy("like_count", "desc").limit(15).get().then(function(snap) {
           snap.forEach(function(item) {
             var transType = 'Bought';
             if (item.data().type == 'sell') {
@@ -84,7 +87,7 @@
                           likeId: like.id,
                           comments: finalComments
                         }
-                        userPosts = [...userPosts, post]
+                        userPosts = [post, ...userPosts]
                         posts = [...userPosts];
                         loading = false
                       })
@@ -96,22 +99,7 @@
           })
           return userPosts
         })
-      } else {
-        loading = false
-      }
-    })
   }  
-
-  async function getFollowingUsers(db, uid) {
-    var following = await db.collection("follows").where("uidFollower", "==", uid).get().then(function(snap) {
-        snap.forEach(function(item) {
-          followingIds.push(item.data().uidFollowing);
-          followingIds = followingIds;
-        });
-      }).catch(function(error) {
-      console.log("Error getting documents: ", error);
-    });
-  }
 
   async function getUserInfo(db, uid){
     var user = await db.collection("users").where("uid", "==", uid).get().then(function(snap) {
@@ -201,34 +189,59 @@
 </script>
 
 <head>
-  <title>Feed</title>
+  <title>Popular</title>
 </head>
 
-{#if loading}
-  <p> Loading </p>
-{:else}
-  {#if posts.length > 0}
-  <div class = "posts">
-    {#each posts as post}
-      <TransactionPost username = {post.username} userLogo = {post.userLogo} cryptoLogo = {post.cryptoPicture}
-        cryptoName = {post.crypto} transactionType = {post.type} transactionTime = {post.time} isLiked = {post.likeStatus}
-        transactionDate = {post.date} transactionCaption = {post.caption} likeCount = {post.likeCount} amount = {post.amount}
-        currentUid = {post.currentUid} transId = {post.transid} likeId = {post.likeId} comments = {post.comments}/>
-      <br>
-    {/each}
+<main>
+  <div class="menu">
+    <Leftbar {falcon} {loggedIn}/>
   </div>
+  <div class = "posts">
+  <div class = "header">Popular</div>
+  {#if loading}
+    <div class = "loading"> Loading </div>
   {:else}
-    <p>Your friends haven't made any transactions yet!</p>
+    {#if posts.length > 0}
+        {#each posts as post}
+          <TransactionPost username = {post.username} userLogo = {post.userLogo} cryptoLogo = {post.cryptoPicture}
+                cryptoName = {post.crypto} transactionType = {post.type} transactionTime = {post.time} isLiked = {post.likeStatus}
+                transactionDate = {post.date} transactionCaption = {post.caption} likeCount = {post.likeCount} amount = {post.amount}
+                currentUid = {post.currentUid} transId = {post.transid} likeId = {post.likeId} comments = {post.comments}/>
+          <br>
+        {/each}
+    {:else}
+      <p>Your friends haven't made any transactions yet!</p>
+    {/if}
   {/if}
-{/if}
+  </div>
+</main>
 
 <style>
-  .posts {
+  main{
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 80px minmax(300px,1500px) 1fr;
+    background-color: #121212;
+    color: white;
+    width: 100%;
+  }
+  .posts{
+    position: relative;
     margin-top: 25px;
     border-radius: 25px 25px 0px 0px;
     display: flex;
     background-color: #2A2A2A;
     padding: 45px;
     flex-direction: column;
+}
+
+  .loading {
+    text-align: center;
+  }
+  .header {
+    font-size: 30px;
+    color:#65ACFF;
+    text-align: center;
+    font-family: inherit;
   }
 </style>

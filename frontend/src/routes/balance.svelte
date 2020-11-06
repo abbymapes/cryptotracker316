@@ -1,13 +1,20 @@
 <script>
+  import Leftbar from "../components/Leftbar.svelte";
+  
+export let falcon = false
+export let loggedIn = false
+
 let selected = 	{ id: 1, text: `Add Balance` };
 $: console.log(selected)
-import { onMount } from 'svelte';	
+import { onMount } from 'svelte';
 let u;
 
+import { goto, stores } from '@sapper/app';
 onMount(()=>{
 	firebase.auth().onAuthStateChanged(function(user) {
   		if (user) {
-			  u = user.uid;
+			loggedIn = true
+			u = user.uid;
 			var docRef = firebase.firestore().collection("users").doc(user.uid);
 
 			docRef.get().then(function(doc) {
@@ -17,19 +24,22 @@ onMount(()=>{
 			console.log(balance)
 
     		} else {
-        	// doc.data() will be undefined in this case
-        	console.log("No such document!");
+				// doc.data() will be undefined in this case
+				goto('login')
+				console.log("No such document!");
     		}
 			}).catch(function(error) {
-    		console.log("Error getting document:", error);
+				goto('login')
+    			console.log("Error getting document:", error);
 			});
 
     // User is signed in.
   		} else {
-    // No user is signed in.
-  	}
+			goto('login')
+    	// No user is signed in.
+  		}
 	});
-	})
+})
 
   let balance;
   let numbers;
@@ -125,11 +135,48 @@ function subNumber() {
 		background-position: 0;
 		color:black;
 	}
+	/* Container to center page on a screen */
+
+	.content {
+    padding: 40px;
+  }
+
+  .header {
+    font-size: 30px;
+    color:#65ACFF;
+    text-align: center;
+    font-family: inherit;
+  }
+
+  a {
+    display: block;
+    color: hsl(210, 35%, 70%);
+    text-align: center;
+    padding: 15px 15px;
+    text-decoration: none;
+    font-size: 18px;
+  }
+
+  a:hover {
+    color: #65ACFF;
+  }
+  main{
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 80px minmax(300px,1500px) 1fr;
+    background-color: #121212;
+    color: white;
+    width: 100%;
+  }
 </style>
 
-<div class='center'>
-<h1> <title>Balance</title> </h1>
-<p> BALANCE = ${balance} </p>
+<main>
+	<div class="menu">
+	  <Leftbar {falcon} {loggedIn}/>
+	</div>
+	<div class='center'>
+		<h1> <title>Balance</title> </h1>
+		<p> BALANCE = ${balance} </p>
 
 <!-- svelte-ignore a11y-no-onchange -->
 <select bind:value={selected} on:change="{() => numbers = ''}">
@@ -152,3 +199,4 @@ function subNumber() {
 {/if}
 
 </div>
+</main>

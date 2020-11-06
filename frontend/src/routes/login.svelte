@@ -15,7 +15,7 @@
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then( res => {
                 waiting = true; 
-                goto('/authUser/feed');
+                goto('feed');
             })
             .catch( e =>{
                 console.log(e);
@@ -74,7 +74,7 @@
         console.log($session.user)
         if ($session.user!='false' && $session.user!=false) {
         
-           goto('/authUser/feed');
+           goto('feed');
         }
     })
 

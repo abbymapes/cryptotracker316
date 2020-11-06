@@ -1,10 +1,15 @@
 <script>
   
   import { stores } from '@sapper/app';
+  import Nav from '../components/Nav.svelte'
   const currencies = ["BTC","ETH","LTC"]
   const { session } = stores();
 
 </script>
+
+<body>
+  <Nav/>
+</body>
 
 <div class="bar">
   {#each currencies as y}
@@ -41,4 +46,8 @@ h1 {
   font-size: 200px;
 }
 
+body {
+      background-color: black;
+  }
+  
 </style>

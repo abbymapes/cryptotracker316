@@ -90,15 +90,19 @@
           </td>
         </tr>
       </table>
-        ${amount} of <a class = 'crypto-link' href = "/authUser/cryptocurrency">{cryptoName}</a>
-        <a href = "/authUser/cryptocurrency">
+        {amount} of <a class = 'crypto-link' href = "cryptocurrency">{cryptoName}</a>
+        <a href = "cryptocurrency">
 				  <img src = '{cryptoLogo}' class = 'transaction-logo' alt = 'cryptologo'>
         <br></a>
         <p class = 'transaction-caption'> <a class = "username-caption-link" href = "profile/{username}"> @{username}: </a>{transactionCaption}</p>
         <span class="social"> 
           <p class = 'transaction-caption'>{likeCount}</p>
-          <svg on:click={handleLike(transId)} style="margin-right: 10px;" class:ok={isLiked} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"  stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-        </span>
+          {#if currentUid == "NotLoggedIn"}
+          <svg style="margin-right: 10px;" class:ok={isLiked == isLiked} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"  stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          {:else}
+            <svg on:click={handleLike(transId)} style="margin-right: 10px;" class:ok={isLiked} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"  stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          {/if}
+          </span>
 
         <table class = 'like-and-comment'>
           <tr>
@@ -113,14 +117,16 @@
               </td>
             </tr>
           {/each}
-          <tr>
-            <td>
-              <form class="comment-box" name="comment-box" on:submit|preventDefault = {handleComment(transId)}>
-                <textarea class="comment-input" id="comment-input" placeholder="Leave a comment" bind:value = {commentInput}></textarea>
-                <input type="submit"/>
-              </form>
-            </td>
-          </tr>
+          {#if currentUid != "NotLoggedIn"}
+            <tr>
+              <td>
+                <form class="comment-box" name="comment-box" on:submit|preventDefault = {handleComment(transId)}>
+                  <textarea class="comment-input" id="comment-input" placeholder="Leave a comment" bind:value = {commentInput}></textarea>
+                  <input type="submit"/>
+                </form>
+              </td>
+            </tr>
+          {/if}
         </table>
 
       </div>

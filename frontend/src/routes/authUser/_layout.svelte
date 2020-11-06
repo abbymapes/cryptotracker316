@@ -58,7 +58,7 @@
 
   .header {
     font-size: 40px;
-    color: hsl(210, 35%, 30%);
+    color: white;
   }
   body{
     height: 100%;

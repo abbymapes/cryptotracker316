@@ -26,6 +26,9 @@
     import Cookies from 'js-cookie';
 
     import Nav from './../components/Nav.svelte'
+    import Leftbar from './../components/Leftbar.svelte'
+
+    export let falcon = false
 
     const { session ,page} = stores();
 
@@ -38,8 +41,10 @@
                     Cookies.set('token', false);
                     $session.user = false;
                     $session.ux = false;
+                    falcon = false;
                     return;
                 }
+                falcon = true;
                 const token = await user.getIdToken();
                 let uid;
                  await firebase.firestore().collection("users").doc(await user.uid).get().then(async doc=>{
@@ -68,7 +73,10 @@
     });
 </script>
 
-{#if $page.error==null}
-    <Nav segment = {$page.path}/>
-{/if}
-	<slot></slot>
+<slot></slot>
+<style>
+  /* Container to center page on a screen */
+  body {
+      background-color: black;
+  }
+</style>
