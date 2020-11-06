@@ -9,13 +9,13 @@
         if ($session.user) {
             firebase.auth().signOut()
                 .then( res => {
-                    goto('login');
+                    goto('/');
                 })
                 .catch( e =>{
                     console.log(e);
                 })
         } else {
-            goto('/login');
+            goto('/');
         }
     });
 </script>

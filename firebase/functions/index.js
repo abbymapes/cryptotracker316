@@ -31,3 +31,17 @@ exports.delLike = functions.firestore
         });
       // perform desired operations ...
     });
+
+  exports.newComment = functions.firestore
+    .document('comments/{comId}')
+    .onCreate(async (snap, context) => {
+      console.log('t')
+      // Get an object representing the document
+      // e.g. {'name': 'Marie', 'age': 66}
+      const toLike = snap.data().transid
+      await db.collection('transaction').doc(toLike)
+        .update({
+          comment_count: admin.firestore.FieldValue.increment(1)
+        });
+      // perform desired operations ...
+    });

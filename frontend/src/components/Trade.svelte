@@ -82,7 +82,7 @@
     width: 100%;
     grid-template-columns: 85px 1fr;
     position: relative;
-    box-shadow: 0px 0px 7px 1px #00000041;
+    box-shadow: 0px 0px 7px 1px #00000057;
     grid-auto-flow: column;
     display: grid;
 

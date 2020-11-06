@@ -40,6 +40,7 @@ class User {
     var isFollowed = false
     let loading = true
     let post = false
+    let postid
     let comments = []
     $: loading = (trades.count > 0)
 
@@ -80,7 +81,7 @@ class User {
 
   async function getTrades() {
     console.log(user.uid)
-    await firebase.firestore().collection("transaction").where("uid", "==", user.uid)
+    await firebase.firestore().collection("transaction").where("uid", "==", user.uid).orderBy('time').limit(10)
         .get()
         .then(snap=>{
             snap.forEach(doc=>{
@@ -134,14 +135,14 @@ class User {
   }
   async function handleViewComment(event) {
     comments = []
-    console.log(trades[event.detail.index].id)
-    await firebase.firestore().collection("comments").where("transid", "==", trades[event.detail.index].id).orderBy("time","desc").limit(10)
+    postid = trades[event.detail.index].id
+    await firebase.firestore().collection("comments").where("transid", "==", trades[event.detail.index].id).orderBy("time")
         .get()
         .then(snap=>{
             snap.forEach(doc=>{
-              comments = [...comments,doc]
+              comments = [...comments,doc.data()]
             
-                console.log(doc.data())
+                //console.log(doc.data())
             })
         })
         .then(e => post = true )
@@ -154,11 +155,11 @@ class User {
     <title>{uname} | Profile</title>
 </svelte:head>
 {#if post}
-  <Post comments={comments} bind:toggle={post}/>
+  <Post comments={comments} bind:toggle={post} {currentUid} {postid}/>
 {/if}
 <main>
   <div class="menu">
-    <Leftbar />
+    <Leftbar {falcon}/>
   </div>
   <div class="trades">
     <h1>Trades</h1>
@@ -172,18 +173,24 @@ class User {
     <br>
   </div>
   <div class="profile">
+    {#if falcon}
+    <div class="editbtn" on:click={()=> edit = !edit} > 
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+    </div>
+    {/if}
     {#if user}
-      <div>
+      <div class="profileinner">
         <div class="image" style={`background-image: url('${user.picture}')`}></div>
-        <h1> {uname}  </h1> 
-        <p style="text-align:center">{user.bio}</p>
+        <div class="profileinfo">
+          <h1 class="uname"> {uname}  </h1> 
+          <div class="ubio">{user.bio}</div>
+        </div>
+<!-- 
         {#if falcon}
-          <button on:click={logout} > Logout</button>
-          <button on:click={()=> edit = !edit} > Edit Profile</button>
           Balance: {user.balance}
         {:else}
           <button class = 'follow-button' on:click = {handleFollow(currentUid, user.uid)}>{(isFollowed) ? 'Unfollow': "Follow"}</button>
-        {/if}
+        {/if} -->
       </div>
       <br>
 
@@ -199,6 +206,21 @@ class User {
 {/if}
 
 <style>
+  .editbtn{
+    position: absolute;
+    top: 25px;
+    right: 0px;
+    background: rgba(255, 255, 255, .2);
+    padding: 10px;
+    display: flex;
+    padding-left: 20px;
+    padding-right: 25px;
+    border-radius: 25px 0px 0px 25px;
+    color:#65ACFF;
+  }
+  .editbtn:hover{
+    cursor: pointer;
+  }
 .image{
   width: 200px;
   height: 200px;
@@ -206,7 +228,7 @@ class User {
     background-size: cover;
     background-repeat: no-repeat;
     border-radius: 150px;
-    margin:auto;
+
 }
 main{
   display: grid;
@@ -219,7 +241,7 @@ main{
 }
 .trades{
   position: relative;
-    height: calc(100% - 115px);
+   
     margin-top: 25px;
     border-radius: 25px 25px 0px 0px;
     display: flex;
@@ -233,5 +255,27 @@ main{
   padding-left: 3px;
   letter-spacing: 3px;
   font-weight: 400;
+}
+.profile{
+  padding: 25px;
+}
+.uname{
+  letter-spacing: 5px;
+    font-weight: 300;
+    font-size: 2.3em;
+}
+.profileinner{
+  display: grid;
+  padding-top: 25px;
+  grid-auto-flow: column;
+    align-items: center;
+}
+.profileinfo{
+  padding:25px;
+}
+.ubio{
+  padding-left: 5px;
+  padding-right: 5px;
+  color: rgba(255,255,255,.7);
 }
   </style>

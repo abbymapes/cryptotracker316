@@ -9,7 +9,7 @@
 	$: active = (segment.includes("authUser") || segment.includes("profile") );
 </script>
 
-{#if $page.path.split('/')[1] != 'profile'}
+{#if $page.path.split('/')[1] != 'profile' && $page.path.split('/')[1] != 'login' }
 <nav>
 	<ul>
 		{#if active}
