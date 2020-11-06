@@ -24,27 +24,6 @@
   $: if (!$session.user) {
     goto('login')
   }
-/*
-  onMount(async()=>{
-    firebase.auth().onAuthStateChanged(function(user) {
-  		if (user) {
-			  u = user.uid;
-			  var docRef = firebase.firestore().collection("users").doc(user.uid);
-			  docRef.get().then(function(doc) {
-          if (doc.exists) {
-            currentUsername = docRef.data().username
-          } else {
-            goto('login')
-            console.log("No such document!");
-          }
-        }).catch(function(error) {
-          console.log("Error getting document:", error);
-          goto('login')
-        });
-  		} else {
-        goto('login')
-  	  }
-  })})*/
 
   async function mount() {
     console.log(currentUsername)

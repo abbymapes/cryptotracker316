@@ -74,6 +74,7 @@
 </script>
 
 <slot></slot>
+
 <style>
   /* Container to center page on a screen */
   body {
