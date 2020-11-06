@@ -200,9 +200,6 @@
 
 </script>
 
-<style>
-</style>
-
 <head>
   <title>Feed</title>
 </head>
@@ -211,6 +208,7 @@
   <p> Loading </p>
 {:else}
   {#if posts.length > 0}
+  <div class = "posts">
     {#each posts as post}
       <TransactionPost username = {post.username} userLogo = {post.userLogo} cryptoLogo = {post.cryptoPicture}
         cryptoName = {post.crypto} transactionType = {post.type} transactionTime = {post.time} isLiked = {post.likeStatus}
@@ -218,7 +216,19 @@
         currentUid = {post.currentUid} transId = {post.transid} likeId = {post.likeId} comments = {post.comments}/>
       <br>
     {/each}
+  </div>
   {:else}
     <p>Your friends haven't made any transactions yet!</p>
   {/if}
 {/if}
+
+<style>
+  .posts {
+    margin-top: 25px;
+    border-radius: 25px 25px 0px 0px;
+    display: flex;
+    background-color: #2A2A2A;
+    padding: 45px;
+    flex-direction: column;
+  }
+</style>

@@ -17,6 +17,7 @@
   export let transId;
   export let comments;
   var commentInput;
+  const db =  firebase.firestore()
 
   async function handleComment(id) {
     db.collection("comments").add({
@@ -63,55 +64,67 @@
 </script>
 
 <div class="transaction-post">
+  
+  <div class="card">
+    <div class="left">
+      {#if transactionType == "Bought"}
+        <h3>BUY</h3>
+      {:else}
+        <h3>SELL</h3>
+      {/if}
+    </div>
+  
+    <div class="right">
+      <table class = 'transaction-header'>
+        <tr>
+          <th class ='transaction-profile-pic'>
+            <a href = "profile/{username}"><img class = "feed-avatar" src = '{userLogo}' alt = 'User Avatar'></a>
+          </th>
+          <td class ='transaction-name'>
+            <h2><a class = "username-link" href = "profile/{username}">{username}</a></h2>
+          </td>
+          <td class = 'transaction-date'>
+            {transactionTime}
+              <br>
+            {transactionDate}
+          </td>
+        </tr>
+      </table>
+        ${amount} of <a class = 'crypto-link' href = "/authUser/cryptocurrency">{cryptoName}</a>
+        <a href = "/authUser/cryptocurrency">
+				  <img src = '{cryptoLogo}' class = 'transaction-logo' alt = 'cryptologo'>
+        <br></a>
+        <p class = 'transaction-caption'> <a class = "username-caption-link" href = "profile/{username}"> @{username}: </a>{transactionCaption}</p>
+        <span class="social"> 
+          <p class = 'transaction-caption'>{likeCount}</p>
+          <svg on:click={handleLike(transId)} style="margin-right: 10px;" class:ok={isLiked} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"  stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+        </span>
 
-	<table class = 'transaction-header'>
-		<tr>
-			<th class ='transaction-profile-pic'>
-				<a href = "profile/{username}"><img class = "feed-avatar" src = '{userLogo}' alt = 'User Avatar'></a>
-			</th>
-			<td class ='transaction-name'>
-				<a class = "username-link" href = "profile/{username}">{username}</a>
-			</td>
-			<td class = 'transaction-date'>
-				{transactionTime}
-          <br>
-        {transactionDate}
-			</td>
-		</tr>
-	</table>
+        <table class = 'like-and-comment'>
+          <tr>
+            <td colspan = 2;>
+              <p class = "transaction-description">Comments</p>
+            </td>
+          </tr>
+          {#each comments as comment}
+            <tr>
+              <td colspan = 2;>
+                <p class = 'comment'><a class = "username-caption-link" href = "profile/{comment.username}"> @{comment.username}: </a>{comment.comment}</p>
+              </td>
+            </tr>
+          {/each}
+          <tr>
+            <td>
+              <form class="comment-box" name="comment-box" on:submit|preventDefault = {handleComment(transId)}>
+                <textarea class="comment-input" id="comment-input" placeholder="Leave a comment" bind:value = {commentInput}></textarea>
+                <input type="submit"/>
+              </form>
+            </td>
+          </tr>
+        </table>
 
-	<p class = "transaction-description">{transactionType} ${amount} of <a class = 'crypto-link' href = "/authUser/cryptocurrency">{cryptoName}</a>.</p>
-			<a href = "/authUser/cryptocurrency">
-				<img src = '{cryptoLogo}' class = 'transaction-logo' alt = 'cryptologo'>
-			<br></a>
-              
-	<p class = 'transaction-caption'> <a class = "username-caption-link" href = "profile/{username}"> @{username}: </a>{transactionCaption}</p>
-  <p class = 'transaction-caption'>{likeCount} likes</p>
-	<table class = 'like-and-comment'>
-    <tr>
-      <td colspan = 2;>
-        <p class = "transaction-description">Comments</p>
-      </td>
-    </tr>
-    {#each comments as comment}
-      <tr>
-        <td colspan = 2;>
-          <p class = 'comment'><a class = "username-caption-link" href = "profile/{comment.username}"> @{comment.username}: </a>{comment.comment}</p>
-        </td>
-      </tr>
-    {/each}
-		<tr>
-			<td style = 'width: 25px;'>
-				<button class = 'like-button' on:click = {handleLike(transId)}>{(isLiked) ? 'Unlike': "Like"}</button>
-			</td>
-			<td>
-				<form class="comment-box" name="comment-box" on:submit|preventDefault = {handleComment(transId)}>
-			    <textarea class="comment-input" id="comment-input" placeholder="Leave a comment" bind:value = {commentInput}></textarea>
-				  <input type="submit"/>
-				</form>
-			</td>
-    </tr>
-	</table>
+      </div>
+  </div>
 </div>
 
 <style>
@@ -120,20 +133,19 @@
     font-family: inherit;
     margin: auto;
     text-align: left;
-    background-color: hsl(0, 0%, 100%);
-    outline: solid 1px;
-    outline-color: hsl(0, 0%, 95%);
     padding: 10px;
-    
+    border-radius: 15px;
+    background-color: inherit;
+    width: 100%;
+    position: relative;
   }
 
   .username-link {
-    font-family: inherit;
     color: hsl(210, 35%, 40%);
     text-align: center;
     padding-top: 5pt;
     text-decoration: none;
-    font-size: 20px;
+    font-weight: 400;
   }
 
   .username-link:hover {
@@ -142,6 +154,7 @@
 
   .transaction-description {
     font-size: 16px;
+    text-align: center;
   }
 
   .crypto-link {
@@ -177,15 +190,15 @@
   }
 
   .transaction-date {
+    font-family: inherit;
     text-align: right;
     font-size: 12px;
-    font-family: inherit;
     color: hsl(210, 35%, 50%);
     white-space: nowrap;
   }
 
   .transaction-caption {
-    font-size: 14px;
+    font-size: 16px;
     text-decoration: none;
   }
 
@@ -203,8 +216,6 @@
   .username-caption-link:hover {
     color: hsl(210, 35%, 70%);
   }
-
-  /* Like button */
   .like-button {
     color: hsl(0, 2%, 30%);
     border-color: hsl(0, 2%, 70%);
@@ -222,8 +233,6 @@
     color: hsl(210, 35%, 70%);
   }
 
-  /* Leave a comment box */
-
   .like-and-comment {
     width: 100%;
     border-collapse: collapse;
@@ -239,17 +248,19 @@
 
   .comment-input {
     font-family: inherit;
-    border-color: hsl(0, 2%, 70%);
+    border-color: hsl(0, 0%, 0%);
   }
 
   textarea {
     font-size: 12px;
+    font-family: inherit;
     text-align: left;
     width: 90%;
     height: 20px;
     display: inline-block;
     resize: none;
     border-radius: 3px;
+    border-color: hsl(0, 0%, 0%);
   }
 
   input {
@@ -277,5 +288,65 @@
     max-width: 200px;
     min-width: 50px;
   }
+
+  .card{
+    font-family: inherit;
+    border-radius: 15px;
+    color: black;
+    width: 100%;
+    grid-template-columns: 85px 1fr;
+    position: relative;
+    box-shadow: 0px 0px 7px 1px #00000057;
+    grid-auto-flow: column;
+    display: grid;
+
+}
+
+.left{
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    width:85px;
+    justify-content: center;
+    background-color: black;
+    color: white;
+    font-size: .9em;
+    letter-spacing: 2px;
+    padding-left: 2px;
+    border-radius: 15px 0px 0px 15px;
+}
+.right{
+    font-family: inherit;
+    padding:15px;
+    background: #ffffff;
+    border-radius: 0px 15px 15px 0px;
+    position: relative;
+}
+.social{
+    display: flex;
+    line-height: 20px;
+    align-items: center;
+    -webkit-user-select: none; /* Chrome/Safari */        
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* IE10+ */
+
+/* Rules below not implemented in browsers yet */
+-o-user-select: none;
+user-select: none;
+}
+.social > svg{
+    margin-left: 5px;
+    transition-duration: .3s;
+    stroke-width: 1.8
+}
+.social > svg:hover{
+    cursor: pointer;
+    stroke-width: 2
+} 
+
+.ok{
+    fill: red;
+    stroke: none;
+}
 </style>
 

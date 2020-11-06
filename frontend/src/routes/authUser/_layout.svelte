@@ -52,7 +52,7 @@
     margin-right: auto;
     font-size: 14pt;
     min-height: 110%;
-    background-color: hsl(0, 0%, 98%);
+    background-color: black;
     z-index: -1;
   }
 
