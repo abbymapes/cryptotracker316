@@ -1,15 +1,22 @@
 <script context="module">
-    const currencies = ["BTC","ETH","LTC"]
+    const currencies = ["bitcoin","ethereum","chainlink","litecoin","ripple","dogecoin","bitcoin-cash","binancecoin"]
   
       export async function preload(page, session) {
       session.prices = {}
-      let requests = []
-      for(let i = 0 ; i < 3; i++)
-        requests = [...requests, this.fetch(`https://api.coinbase.com/v2/prices/${currencies[i]}-USD/spot`)] 
-      await Promise.all(requests.map(async r => {
-        const res = await (await r).json();
-        session.prices[res.data.base] = res.data.amount
-      }))
+      let request = this.fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${encodeURIComponent(currencies.join(','))}&vs_currencies=USD`) 
+        const res = await (await request).json();
+        
+       session.prices ={
+        BTC : res.bitcoin.usd,
+        ETH: res.ethereum.usd,
+        LINK : res.chainlink.usd,
+        LTC: res.litecoin.usd,
+        XRP : res.ripple.usd,
+        DOGE :res.dogecoin.usd,
+        BCH : res['bitcoin-cash'].usd,
+        BNB : res.binancecoin.usd
+        }
+
       return
     } 
   </script>
