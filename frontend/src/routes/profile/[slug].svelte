@@ -34,6 +34,7 @@ class User {
 
     let currentUid
     let user
+    
     var followId
     let trades = []
     let edit = false
@@ -44,10 +45,12 @@ class User {
     let comments = []
     $: loading = (trades.count > 0)
 
-    $: if (uname) {
-        console.log("uname changed " + uname)
+    $: if(uname) updater() 
+    async function updater() {
+       console.log("uname changed " + uname)
         loading = true
-        mount()
+        await mount()
+       await  getTrades()
     }
 
     async function logout() {
@@ -57,8 +60,8 @@ class User {
     }
 
     onMount(async ()=>{
-      await mount()
-      await getTrades()
+      // await mount()
+      // await getTrades()
     })
 
 
@@ -73,20 +76,21 @@ class User {
             currentUid = firebase.auth().currentUser ? firebase.auth().currentUser.uid : undefined
         })
         .then(() => {
-           console.log(currentUid, user)
+         //  console.log(currentUid, user)
        }).then(() => {
-     //     getFollowStatus(currentUid, user.uid)
+          getFollowStatus(currentUid, user.uid)
        })
   }
 
   async function getTrades() {
-    console.log(user.uid)
+   // console.log(user.uid)
+   trades = []
     await firebase.firestore().collection("transaction").where("uid", "==", user.uid).orderBy('time').limit(10)
         .get()
         .then(snap=>{
             snap.forEach(doc=>{
                 trades = [...trades,doc]
-                console.log(doc.data().time.seconds)
+             //   console.log(doc.data().time.seconds)
             })
         })
   }
@@ -114,7 +118,7 @@ class User {
                 uidFollowing: otherUser
             })
             .then(function(docRef) {
-                console.log("Follows document written with ID: ", docRef.id);
+               // console.log("Follows document written with ID: ", docRef.id);
                 followId = docRef.id
             })
             .catch(function(error) {
@@ -123,7 +127,7 @@ class User {
         } else {
             if (followId) {
                await firebase.firestore().collection("follows").doc(followId).delete().then(function() {
-                    console.log("Follow document successfully deleted!");
+                //    console.log("Follow document successfully deleted!");
                     followId = null
                 }).catch(function(error) {
                     console.error("Error removing document: ", error);
@@ -148,7 +152,7 @@ class User {
         .then(e => post = true )
         .catch( e => console.log(e))
   }
-  
+
 </script>
 
 <svelte:head>
@@ -185,15 +189,15 @@ class User {
           <h1 class="uname"> {uname}  </h1> 
           <div class="ubio">{user.bio}</div>
         </div>
-<!-- 
-        {#if falcon}
-          Balance: {user.balance}
-        {:else}
-          <button class = 'follow-button' on:click = {handleFollow(currentUid, user.uid)}>{(isFollowed) ? 'Unfollow': "Follow"}</button>
-        {/if} -->
       </div>
       <br>
-
+      <div class="status"> 
+      {#if falcon}
+      <b>Availiable Balance: <br> ${user.balance}</b>
+    {:else}
+      <button class = 'follow-button' on:click = {handleFollow(currentUid, user.uid)}>{(isFollowed) ? 'Unfollow': "Follow"}</button>
+    {/if}
+  </div>
     {/if}
   </div>
 
@@ -277,5 +281,42 @@ main{
   padding-left: 5px;
   padding-right: 5px;
   color: rgba(255,255,255,.7);
+}
+
+button:focus,
+button:active,
+button:hover
+{
+    outline:0px !important;
+    -webkit-appearance:none;
+    box-shadow: none !important;
+}
+button {
+	background: none;
+	color: inherit;
+	border: none;
+  padding: 10px;
+  padding-right: 15px;
+  padding-left: 15px;
+	font: inherit;
+    cursor: pointer;
+border-radius: 50px;
+    outline: inherit;
+    transition-duration: .5s;
+    background-color: #2E6EFF;
+    color: white;
+}
+button:hover {
+    background-color: #265cdb;
+}
+.status{
+  display: flex;
+  justify-content: center;
+}
+.status b{
+  font-weight: normal;
+  color: rgba(255,255,255,.8);
+text-align: center;
+
 }
   </style>

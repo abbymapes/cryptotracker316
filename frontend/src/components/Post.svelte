@@ -48,7 +48,7 @@
 
 <section transition:fly={{y:-40}}> 
     
-    <span class="close" on:click={()=> {toggle = !toggle}}><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>
+    <span class="close" on:click={()=> {toggle = !toggle}}><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>
     <div  class="comms">
     {#each comments as comment}
         {#if uns[comment.uid]}
@@ -90,8 +90,8 @@
     min-width: 550px;
     left: 50%;
     z-index: 10;
-    background-color: white;
-    color: black;
+    background-color: rgb(51, 51, 51);
+    color: white;
     top: 50%;
     transform: translate3d(-50%,-50%,0px);
 
@@ -129,7 +129,8 @@
         height: 100%;
         width: 100%;
         padding:15px;
-  background-color: #f5f5f5;
+        background-color:rgb(77, 77, 77);
+    color:white;
     box-sizing: border-box;
     font-family: inherit;
     font-size: 1em;
