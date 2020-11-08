@@ -29,7 +29,7 @@
   }
 
   onMount(()=>{currentUid = firebase.auth().currentUser ? firebase.auth().currentUser.uid : undefined})
-
+//get users info and balance
   onMount(()=>{
 	firebase.auth().onAuthStateChanged(function(user) {
   		if (user) {
@@ -62,7 +62,7 @@
 })
 
 
-    
+//after searching for a crypto they can hit buy or sell, if buying following script is executed
     function buy() {
 	var sfDocRef = firebase.firestore().collection("users").doc(u);
 	return firebase.firestore().runTransaction(function(transaction) {
@@ -71,7 +71,7 @@
             throw "Document does not exist!";
         }
 
-		if (balance >= (n*cryptoPrice)) { //needs to be user balance
+		if (balance >= (n*cryptoPrice)) { //(how do i make sure this is user balance and pull cryto prices)
             //Update document to show ownership of x amount of crypto
         } else {
             return Promise.reject("Transaction failed: Not Enough balance!");
@@ -85,6 +85,8 @@
 	});
     alert('Balance Added!');
 	}
+
+
 
 async function trans() {
     // Add a new document in collection "cities"
