@@ -30,6 +30,62 @@
 
   onMount(()=>{currentUid = firebase.auth().currentUser ? firebase.auth().currentUser.uid : undefined})
 
+  onMount(()=>{
+	firebase.auth().onAuthStateChanged(function(user) {
+  		if (user) {
+			loggedIn = true
+			u = user.uid;
+			var docRef = firebase.firestore().collection("users").doc(user.uid);
+
+			docRef.get().then(function(doc) {
+    		if (doc.exists) {
+			console.log("Document data:", doc.data());
+			balance = doc.data().balance;
+			console.log(balance)
+
+    		} else {
+				// doc.data() will be undefined in this case
+				goto('login')
+				console.log("No such document!");
+    		}
+			}).catch(function(error) {
+				goto('login')
+    			console.log("Error getting document:", error);
+			});
+
+    // User is signed in.
+  		} else {
+			goto('login')
+    	// No user is signed in.
+  		}
+	});
+})
+
+
+    
+    function buy() {
+	var sfDocRef = firebase.firestore().collection("users").doc(u);
+	return firebase.firestore().runTransaction(function(transaction) {
+    return transaction.get(sfDocRef).then(function(sfDoc) {
+        if (!sfDoc.exists) {
+            throw "Document does not exist!";
+        }
+
+		if (balance >= (n*cryptoPrice)) { //needs to be user balance
+            //Update document to show ownership of x amount of crypto
+        } else {
+            return Promise.reject("Transaction failed: Not Enough balance!");
+        }
+    });
+
+	}).then(function() {
+    	alert("Transaction successfully committed!");
+	}).catch(function(error) {
+    	alert("Transaction failed: Not Enough balance!", error);
+	});
+    alert('Balance Added!');
+	}
+
 async function trans() {
     // Add a new document in collection "cities"
     currentUid.
