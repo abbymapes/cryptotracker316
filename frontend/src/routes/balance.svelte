@@ -42,7 +42,7 @@ onMount(()=>{
 })
 
   let balance;
-  let numbers;
+  let numbers = 100;
   let yes = false;
   let questions = [
 		{ id: 1, text: `Add Balance` },
@@ -62,7 +62,7 @@ function addNumber() {
             transaction.update(sfDocRef, { balance: newBalance });
             return newBalance;
         } else {
-            return Promise.reject("Transaction Failed");
+            return Promise.reject("Transaction failed: Not Enough balance!");
         }
     });
 
@@ -91,7 +91,7 @@ function subNumber() {
             transaction.update(sfDocRef, { balance: newBalance });
             return newBalance;
         } else {
-            return Promise.reject("Transaction Failed");
+            return Promise.reject("Transaction failed: Not Enough balance!");
         }
     });
 
@@ -107,67 +107,86 @@ function subNumber() {
 </script>
 
 <style>
+
 	.center{
 		align-items: center;
 		display: flex;
-		flex-direction: column;
+justify-content: center;
+height: 100%;
+flex-direction: column;
 	}
 
   p {
-		color: black;
+	
 		font-family: 'Arial';
 		font-size: 2em;
-    align-items: center;
+    text-align: center;
 	}
-  input { display: block; width: 300px; max-width: 100%;}
-  button {
-		height: 4rem;
-		width: 32rem;
-		background-color: black;
-		border-color: gray;
-		color: white;
-		font-size: 2rem;
-		background-image: linear-gradient(90deg, white 50%, transparent 50%);
-		background-position: 100%;
-		background-size: 400%;
-	}
-	button:hover {
-		background-position: 0;
-		color:black;
-	}
+
 	/* Container to center page on a screen */
 
-	.content {
-    padding: 40px;
-  }
-
-  .header {
-    font-size: 30px;
-    color:#65ACFF;
-    text-align: center;
-    font-family: inherit;
-  }
-
-  a {
-    display: block;
-    color: hsl(210, 35%, 70%);
-    text-align: center;
-    padding: 15px 15px;
-    text-decoration: none;
-    font-size: 18px;
-  }
-
-  a:hover {
-    color: #65ACFF;
-  }
   main{
-    display: grid;
+	display: grid;
+	height: 100vh;
+		width: 100vw;
     grid-auto-flow: column;
-    grid-template-columns: 80px minmax(300px,1500px) 1fr;
+    grid-template-columns: 80px  1fr;
     background-color: #121212;
     color: white;
     width: 100%;
   }
+  button:focus,
+button:active,
+button:hover,
+input[type="number"]:focus,
+select
+{
+    outline:0px !important;
+    -webkit-appearance:none;
+    box-shadow: none !important;
+}
+button ,input[type="number"]{
+	background: none;
+	color: inherit;
+	border: none;
+
+	font: inherit;
+    cursor: pointer;
+
+    outline: inherit;
+    transition-duration: .5s;
+    background-color: #2E6EFF;
+    color: white;
+}
+input[type="number"]{
+	background-color:rgb(77, 77, 77);
+}
+button,input,select{
+	padding:10px;
+	padding-left: 15px;
+	padding-right: 15px;
+	width: 300px;
+	margin: 15px;
+}
+select{
+	background: url('/chevron-down.svg') 96% / 15% no-repeat #EEE;
+}
+button:hover {
+    background-color: #265cdb;
+}
+button:disabled{
+    color: rgba(255,255,255,.4);
+    background-color: #265cdb;
+    cursor: not-allowed;
+}
+button{
+	width: unset;
+}
+.inputs{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
 </style>
 
 <main>
@@ -176,21 +195,23 @@ function subNumber() {
 	</div>
 	<div class='center'>
 		<h1> <title>Balance</title> </h1>
-		<p> BALANCE = ${balance} </p>
+		<p> Current Balance: <br> ${balance} </p>
 
-<!-- svelte-ignore a11y-no-onchange -->
+
+<div class="inputs">
+	<!-- svelte-ignore a11y-no-onchange -->
 <select bind:value={selected} on:change="{() => numbers = ''}">
-{#each questions as question}
-<option value={question}>
-  {question.text}
-  </option>
-{/each}
-</select>
+	{#each questions as question}
+	<option value={question}>
+	  {question.text}
+	  </option>
+	{/each}
+	</select>
+<input type="number" bind:value={numbers} min=0 max=1000>
+<input type="range" bind:value={numbers} min=0 max=1000>
+<input type="checkbox" bind:checked={yes}> <h6>Check the box to continue.</h6>
+</div>
 
-<input type=number bind:value={numbers} min=0 max=1000>
-<input type=range bind:value={numbers} min=0 max=1000>
-
-<input type=checkbox bind:checked={yes}> <h6>Check box to continue adding balance.</h6>
 {#if yes} <h3>Thank you. Click button to continue.</h3>
 {:else} <h3>You must check box to continue.</h3>
 {/if} 
