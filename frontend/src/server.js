@@ -16,11 +16,13 @@ const app = express()
 			session: async (req, res) => { // populates user if it exists
 				if (req.cookies.token) {
 					return {
-						user: req.cookies.token
+						user: req.cookies.token,
+						prices: undefined
 					};
 				}
 				return {
-					user: false
+					user: undefined,
+					prices: undefined
 				};
 			}
         })

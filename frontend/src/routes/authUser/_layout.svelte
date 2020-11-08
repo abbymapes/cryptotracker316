@@ -1,9 +1,7 @@
 <script>
-	import Nav from '../../components/Nav.svelte';
-	export let segment;
+  import Nav from '../../components/Nav.svelte';
+  
 </script>
-
-
 
 <div id = "content">
   <div class="page-container">
@@ -54,13 +52,13 @@
     margin-right: auto;
     font-size: 14pt;
     min-height: 110%;
-    background-color: hsl(0, 0%, 98%);
+    background-color: black;
     z-index: -1;
   }
 
   .header {
     font-size: 40px;
-    color: hsl(210, 35%, 30%);
+    color: white;
   }
   body{
     height: 100%;

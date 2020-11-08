@@ -1,6 +1,6 @@
 <script>
 	import { goto,stores } from '@sapper/app';
-    import firebase from 'firebase/app';
+   
     import {onMount} from 'svelte';
 
     const {session} = stores()
@@ -9,13 +9,13 @@
         if ($session.user) {
             firebase.auth().signOut()
                 .then( res => {
-                    goto('login');
+                    goto('/');
                 })
                 .catch( e =>{
                     console.log(e);
                 })
         } else {
-            goto('/login');
+            goto('/');
         }
     });
 </script>
