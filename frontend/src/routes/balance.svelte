@@ -195,8 +195,9 @@ button{
 	</div>
 	<div class='center'>
 		<h1> <title>Balance</title> </h1>
-		<p> Current Balance: <br> ${balance} </p>
-
+		
+			<p> Current Balance: <br> {#if balance}${balance}{/if} </p>
+	
 
 <div class="inputs">
 	<!-- svelte-ignore a11y-no-onchange -->

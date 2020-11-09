@@ -3,12 +3,10 @@
         const { slug } = page.params;
         let { user,ux } = session;
         let falcon = slug==ux
-
         return {uname : slug, ux, falcon}
     }
 </script>
 <script>
-
 class User {
     constructor (uid, username, email, balance, picture, bio) {
       this.uid = uid;
@@ -25,14 +23,12 @@ class User {
     import Post from '../../components/Post.svelte';
     import Editor from '../../components/Editor.svelte';
     import Leftbar from "../../components/Leftbar.svelte";
-
     const { page,session} = stores();
     const { slug } = $page.params;
     export let uname = slug
     export let falcon = false
     export let ux = ""
     export let loggedIn = false
-
     let currentUid
     let user
     
@@ -45,28 +41,22 @@ class User {
     let postid
     let comments = []
     $: loading = (trades.count > 0)
-
     $: if(uname) updater() 
-
     async function updater() {
        console.log("uname changed " + uname)
         loading = true
         await mount()
         await  getTrades()
     }
-
     async function logout() {
         return firebase.auth().signOut().then(() => {
             goto('/login');
         });
     }
-
     onMount(async ()=>{
       // await mount()
       // await getTrades()
     })
-
-
   async function mount() {
     await firebase.firestore().collection("users").where("username", "==", uname)
         .get()
@@ -86,7 +76,6 @@ class User {
           getFollowStatus(currentUid, user.uid)
        })
   }
-
   async function getTrades() {
    // console.log(user.uid)
    trades = []
@@ -99,7 +88,6 @@ class User {
             })
         })
   }
-
   async function getFollowStatus(currentUid, otherUid){
     let db = firebase.firestore()
     var id
@@ -116,7 +104,6 @@ class User {
     }
     return id;
   }
-
   async function handleFollow(currentUid, otherUser) {
     if (!loading) {
         if (!isFollowed) {
@@ -159,7 +146,6 @@ class User {
         .then(e => post = true )
         .catch( e => console.log(e))
   }
-
 </script>
 
 <svelte:head>
@@ -241,7 +227,6 @@ class User {
     background-size: cover;
     background-repeat: no-repeat;
     border-radius: 150px;
-
 }
 main{
   display: grid;
@@ -260,6 +245,8 @@ main{
     background-color: #2A2A2A;
     padding: 45px;
     flex-direction: column;
+    overflow: hidden;
+    overflow-y: auto;
 }
 .trades > h1{
   text-align:center;
@@ -290,7 +277,6 @@ main{
   padding-right: 5px;
   color: rgba(255,255,255,.7);
 }
-
 button:focus,
 button:active,
 button:hover
@@ -325,6 +311,5 @@ button:hover {
   font-weight: normal;
   color: rgba(255,255,255,.8);
 text-align: center;
-
 }
   </style>

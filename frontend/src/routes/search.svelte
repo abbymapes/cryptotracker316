@@ -86,7 +86,7 @@
   <div class = "content">
     <div class="search-page">
           <form class="comment-box" name="comment-box" on:submit|preventDefault = {handleSearch}>
-            <textarea class="search-input" id="search-input" placeholder="Search" bind:value = {searchInput}></textarea>
+            <input type="text" class="search-input" id="search-input" placeholder="Search" bind:value={searchInput} />
             <select bind:value={selectedType} id="types" name="types">
               <option value="users">for Users</option>
               <option value="cryptocurrency">for Cryptocurrencies</option>
@@ -174,25 +174,22 @@
     }
     form {
       display: flex;
-      justify-content: left;
+
     }
   
     .search-input {
       font-family: inherit;
-      border-width: 1px;
+
     }
   
-    textarea {
+    input[type="text"] {
       font-family: inherit;
       font-size: 16px;
       text-align: left;
-      width: 90%;
-      height: 25px;
-      display: inline-block;
+      align-items: center;
+      display: flex;
       resize: none;
-      border-radius: 1px;
-      border-style: solid;
-      border-width: 1px;
+
     }
   
     input {
@@ -244,4 +241,56 @@
     color: white;
     width: 100%;
   }
+
+  button:focus,
+button:active,
+button:hover,
+input[type="number"]:focus,
+select, input[type="text"] 
+{
+    outline:0px !important;
+    -webkit-appearance:none;
+    box-shadow: none !important;
+}
+button ,input[type="number"]{
+	background: none;
+	color: inherit;
+	border: none;
+
+	font: inherit;
+    cursor: pointer;
+
+    outline: inherit;
+
+}
+input[type="number"]{
+	background-color:rgb(77, 77, 77);
+}
+input[type="text"] ,input,select{
+	padding:10px;
+	padding-left: 15px;
+	padding-right: 15px;
+  border: none;
+  border-radius: 0px;
+}
+select{
+	background: url('/chevron-down.svg') 96% / 15% no-repeat #EEE;
+  width: 15%;
+}
+input[type="text"] {
+  width: 70%;
+  border-radius: 25px 0px 0px 25px;
+}
+
+
+input[type="submit"]{
+	width: 15%;
+  border-radius: 0px 25px 25px 0px;
+  transition-duration: .5s;
+    background-color: #2E6EFF;
+    color: white;
+}
+input[type="submit"]:hover {
+    background-color: #265cdb;
+}
   </style>
