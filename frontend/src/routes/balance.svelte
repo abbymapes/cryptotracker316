@@ -10,6 +10,9 @@ import { onMount } from 'svelte';
 let u;
 
 import { goto, stores } from '@sapper/app';
+import firebase from 'firebase/app'
+  import 'firebase/firestore'
+
 onMount(()=>{
 	firebase.auth().onAuthStateChanged(function(user) {
   		if (user) {

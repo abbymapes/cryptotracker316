@@ -12,7 +12,8 @@ const app = express()
 	app.use(
 		compression({ threshold: 0 }),
 		sirv('static', { dev }),
-		sapper.middleware({
+		sapper.middleware(
+			{
 			session: async (req, res) => { // populates user if it exists
 				if (req.cookies.token) {
 					return {
@@ -25,7 +26,8 @@ const app = express()
 					prices: undefined
 				};
 			}
-        })
+		}
+		)
 	)
 	if(dev){
 	app.listen(PORT, err => {

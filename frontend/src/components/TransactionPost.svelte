@@ -17,10 +17,12 @@
   export let transId;
   export let comments;
   var commentInput;
-  const db =  firebase.firestore()
+  import firebase from 'firebase/app'
+  import 'firebase/firestore'
+
 
   async function handleComment(id) {
-    db.collection("comments").add({
+    firebase.firestore().collection("comments").add({
         uid: currentUid,
         transid: id,
         comment: commentInput,
@@ -38,7 +40,7 @@
 
   async function handleLike(id) {
     if (!isLiked) {
-      db.collection("likes").add({
+      firebase.firestore().collection("likes").add({
         uid: currentUid,
         transid: id
       })
@@ -51,7 +53,7 @@
       });
       likeCount += 1;
     } else {
-      db.collection("likes").doc(likeId).delete().then(function() {
+      firebase.firestore().collection("likes").doc(likeId).delete().then(function() {
         console.log("Document successfully deleted!");
       }).catch(function(error) {
           console.error("Error removing document: ", error);

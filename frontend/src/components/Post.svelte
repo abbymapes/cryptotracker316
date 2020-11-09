@@ -1,6 +1,9 @@
 <script>
     import { fly } from "svelte/transition";
     import { onMount } from "svelte";
+    import firebase from 'firebase/app'
+  import 'firebase/firestore'
+
     export let toggle
     export let currentUid
     export let postid

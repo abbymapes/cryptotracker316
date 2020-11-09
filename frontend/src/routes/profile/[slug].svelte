@@ -23,6 +23,8 @@ class User {
     import Post from '../../components/Post.svelte';
     import Editor from '../../components/Editor.svelte';
     import Leftbar from "../../components/Leftbar.svelte";
+    import firebase from 'firebase/app'
+    import 'firebase/firestore'
     const { page,session} = stores();
     const { slug } = $page.params;
     export let uname = slug

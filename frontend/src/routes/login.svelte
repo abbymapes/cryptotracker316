@@ -2,6 +2,13 @@
     import { goto,stores } from '@sapper/app';
  
     import {onMount} from 'svelte';
+    import firebase from 'firebase/app'
+  import 'firebase/firestore'
+  
+  import 'firebase/database'
+  
+  import 'firebase/auth'
+
 
     let email = '';
     let password = '';

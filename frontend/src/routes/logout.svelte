@@ -2,7 +2,8 @@
 	import { goto,stores } from '@sapper/app';
    
     import {onMount} from 'svelte';
-
+    import firebase from 'firebase/app'
+  import 'firebase/auth'
     const {session} = stores()
 
     onMount(()=>{

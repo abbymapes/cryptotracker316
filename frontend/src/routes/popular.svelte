@@ -4,6 +4,8 @@
   
   import {onMount} from 'svelte';
   import { stores } from '@sapper/app';
+  import firebase from 'firebase/app'
+  import 'firebase/firestore'
   const {page,session} = stores();
   const { slug } = $page.params;
 

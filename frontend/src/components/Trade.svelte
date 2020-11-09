@@ -8,7 +8,8 @@
     let liked = false
     import { stores } from '@sapper/app';
     import { onMount,createEventDispatcher } from "svelte"; 
-
+    import firebase from 'firebase/app'
+    import 'firebase/firestore'
     const dispatch = createEventDispatcher();
 
     let date = trade.time.toDate()

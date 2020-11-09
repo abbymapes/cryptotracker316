@@ -27,7 +27,10 @@
 
     import Nav from './../components/Nav.svelte'
     import Leftbar from './../components/Leftbar.svelte'
+    import firebase from 'firebase/app'
 
+  import 'firebase/firestore'
+	import 'firebase/auth'
     export let falcon = false
 
     const { session ,page} = stores();
