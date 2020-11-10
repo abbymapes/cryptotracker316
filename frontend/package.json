@@ -9,6 +9,7 @@
     "start": "node __sapper__/build"
   },
   "dependencies": {
+    "coinmarketcap-api": "^3.1.1",
     "compression": "^1.7.1",
     "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
