@@ -38,6 +38,6 @@
 <!-- TradingView Widget BEGIN -->
 <div class="tradingview-widget-container">
     <div id="technical-analysis"></div>
-    <div class="tradingview-widget-copyright"><a href="https://in.tradingview.com/symbols/AAPL/" rel="noopener" target="_blank"><span class="blue-text">AAPL Chart</span></a> by TradingView</div>
+    <div class="tradingview-widget-copyright">by TradingView</div>
   </div>
   <!-- TradingView Widget END -->
