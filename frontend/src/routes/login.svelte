@@ -22,7 +22,10 @@
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then( res => {
                 waiting = true; 
-                goto('feed');
+                setTimeout(()=>{
+                    goto('/feed');
+                },1500)
+       
             })
             .catch( e =>{
                 console.log(e);
@@ -78,7 +81,7 @@
     }
     onMount(()=>{
         first = false;
-        console.log($session.user)
+        //console.log($session.user)
         if ($session.user!='false' && $session.user!=false) {
         
            goto('feed');

@@ -143,7 +143,7 @@
   }
 
   async function getComments(db, transid){
-    var comments = await db.collection("comments").where("transid", "==", transid).orderBy("time", "asc").get().then(function(snap) {
+    var comments = await db.collection("comments").where("transid", "==", transid).orderBy("time", "asc").limit(10).get().then(function(snap) {
       var commentList = [];
       snap.forEach(function(item) {
         var commentToAdd = {

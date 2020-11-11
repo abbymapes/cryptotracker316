@@ -136,7 +136,7 @@ class User {
   async function handleViewComment(event) {
     comments = []
     postid = trades[event.detail.index].id
-    await firebase.firestore().collection("comments").where("transid", "==", trades[event.detail.index].id).orderBy("time")
+    await firebase.firestore().collection("comments").where("transid", "==", trades[event.detail.index].id).orderBy("time").limit(15)
         .get()
         .then(snap=>{
             snap.forEach(doc=>{
