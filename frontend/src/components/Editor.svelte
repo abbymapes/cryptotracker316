@@ -3,7 +3,7 @@
  import { fly } from "svelte/transition";
 
  import firebase from 'firebase/app'
-  //  import 'firebase/storage'
+  import 'firebase/storage'
 
  export let img
  export let edit 

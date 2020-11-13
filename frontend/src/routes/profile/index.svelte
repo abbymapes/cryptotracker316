@@ -9,3 +9,4 @@
         return this.redirect(302, `/profile/${ux}`);
     }
 </script>
+Loading...

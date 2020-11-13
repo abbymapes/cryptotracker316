@@ -48,7 +48,7 @@
     "style": "1",
     "toolbar_bg": "#f1f3f6",
     "withdateranges": true,
-    "hide_side_toolbar": false,
+    "hide_side_toolbar": true,
     "allow_symbol_change": true,
     "save_image": false,
     "studies": [

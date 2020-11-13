@@ -293,7 +293,7 @@
     margin-left: auto;
     margin-right: auto;
     height: auto;
-    max-width: 200px;
+    max-width: 150px;
     min-width: 50px;
   }
 

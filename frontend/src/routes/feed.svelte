@@ -237,7 +237,7 @@
   main{
     display: grid;
     grid-auto-flow: column;
-    grid-template-columns: 80px minmax(300px,1500px) 1fr;
+    grid-template-columns: 80px  1fr;
     background-color: #121212;
     color: white;
     width: 100%;
