@@ -50,7 +50,7 @@
             if (item.data().name && item.data().name.toLowerCase().includes(searchInput.toLowerCase())){
               var result = {name: item.data().name,
                         picture: item.data().logo,
-                        link: "cryptocurrency"}
+                        link: "currencies/" + item.data().stock_symbol}
               resultsFound.push(result);
               console.log(result.name)
               resultsFound = resultsFound;
@@ -91,7 +91,7 @@
             <input type="text" class="search-input" id="search-input" placeholder="Search" bind:value={searchInput} />
             <select bind:value={selectedType} id="types" name="types">
               <option value="users">for Users</option>
-              <option value="cryptocurrency">for Cryptocurrencies</option>
+              <option value="cryptocurrency">for Currencies</option>
             </select>
             <input type="submit"/>
           </form>
@@ -130,6 +130,7 @@
     background-color: #2A2A2A;
     width: 100%;
   }
+
   .results-avatar {
       border-radius: 50%;
       height: 50px;
@@ -283,7 +284,6 @@ input[type="text"] {
   width: 70%;
   border-radius: 25px 0px 0px 25px;
 }
-
 
 input[type="submit"]{
 	width: 15%;

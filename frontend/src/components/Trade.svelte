@@ -9,7 +9,6 @@
     import { stores } from '@sapper/app';
     import { onMount,createEventDispatcher } from "svelte"; 
     import firebase from 'firebase/app'
-    import 'firebase/firestore'
     const dispatch = createEventDispatcher();
 
     let date = trade.time.toDate()
@@ -61,10 +60,10 @@
         <h3>{trade.type.toUpperCase()}</h3>
     </div>
     <div class="right">
-        <h2>{name}</h2>
-        <h2>{trade.amount.toLocaleString()} of <b>{trade.stock} </b></h2>
+        <h2><a href = "profile/{name}">{name}</a></h2>
+        <h2>{trade.amount.toLocaleString()} of <a href = "currencies/{trade.stock}"><b>{trade.stock} </b></a></h2>
         
-        <span class="date">{date.getDate()}/{date.getMonth()+1}/{date.getFullYear()}</span>
+        <span class="date">{date.getMonth()+1}/{date.getDate()}/{date.getFullYear()}</span>
         <p>{trade.caption}</p>
         <span class="social"> 
             {l}  
@@ -109,6 +108,10 @@
 h2 b{
     font-weight: 400;
     color: #3895ff;
+}
+
+a {
+    text-decoration: none;
 }
 .date{
     position: absolute;
