@@ -69,6 +69,5 @@ let trades = []
 {slug} , {map[slug.toUpperCase()]} ,${$session.prices[slug.toUpperCase()] } , 
 
 {#each trades as trade}
-    {JSON.stringify(trade.caption)}
-
+    {JSON.stringify(trade.username)}
 {/each}
