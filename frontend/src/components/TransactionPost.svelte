@@ -20,6 +20,16 @@
   import firebase from 'firebase/app'
   import 'firebase/firestore'
 
+  const map = {
+    'Bitcoin': 'BTC',
+    'Ripple': 'XRP',
+    'Litecoin': 'LTC',
+    'Dogecoin': 'DOGE', 
+    'Ethereum': 'ETH',
+    'Chainlink': 'LINK',
+    'Bitcoin Cash': 'BCH',
+    'Binance Coin': 'BNB'
+  }
 
   async function handleComment(id) {
     firebase.firestore().collection("comments").add({
@@ -92,8 +102,8 @@
           </td>
         </tr>
       </table>
-        {amount} of <a class = 'crypto-link' href = "cryptocurrency">{cryptoName}</a>
-        <a href = "cryptocurrency">
+        {amount} of <a class = 'crypto-link' href = "currencies/{map[cryptoName]}">{cryptoName}</a>
+        <a href = "currencies/{map[cryptoName]}">
 				  <img src = '{cryptoLogo}' class = 'transaction-logo' alt = 'cryptologo'>
         <br></a>
         <p class = 'transaction-caption'> <a class = "username-caption-link" href = "profile/{username}"> @{username}: </a>{transactionCaption}</p>

@@ -14,7 +14,7 @@
 <div class="bar">
   {#each currencies as y}
     <span>
-      {y} {#if $session.prices} ${$session.prices[y]} {/if}
+      <a href = "currencies/{y}">{y} {#if $session.prices} ${$session.prices[y]} {/if}</a>
     </span>
   {/each}
 </div>
@@ -33,6 +33,10 @@
   align-items: center;
   padding:5px;
   justify-content: space-around;
+}
+
+a {
+  text-decoration: none;
 }
 
 h1 {
