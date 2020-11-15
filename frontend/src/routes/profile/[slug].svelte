@@ -8,13 +8,14 @@
 </script>
 <script>
 class User {
-    constructor (uid, username, email, balance, picture, bio) {
+    constructor (uid, username, email, balance, picture, bio, portfolio) {
       this.uid = uid;
       this.username = username;
       this.balance = balance;
       this.email = email;
       this.picture = picture;
-      this.bio = bio || ""
+      this.bio = bio || "";
+      this.portfolio = portfolio
     }
   }
     import { goto,stores } from '@sapper/app';
@@ -22,6 +23,7 @@ class User {
     import Trade from '../../components/Trade.svelte';
     import Post from '../../components/Post.svelte';
     import Editor from '../../components/Editor.svelte';
+import Portfolio from '../../components/Portfolio.svelte';
     import Leftbar from "../../components/Leftbar.svelte";
     import firebase from 'firebase/app'
     import 'firebase/firestore'
@@ -64,7 +66,7 @@ class User {
         .get()
         .then(snap=>{
             snap.forEach(doc=>{
-                user = new User(doc.data().uid, doc.data().username, doc.data().email, doc.data().balance, doc.data().picture,doc.data().bio)
+                user = new User(doc.data().uid, doc.data().username, doc.data().email, doc.data().balance, doc.data().picture,doc.data().bio,doc.data().portfolio)
             })
         }).then(()=> {
             currentUid = firebase.auth().currentUser ? firebase.auth().currentUser.uid : undefined
@@ -184,11 +186,13 @@ class User {
           <h1 class="uname"> {uname}  </h1> 
           <div class="ubio">{user.bio}</div>
         </div>
+
       </div>
       <br>
       <div class="status"> 
       {#if falcon}
       <b>Availiable Balance: <br> ${user.balance}</b>
+        <Portfolio portfolio={user.portfolio}/>
     {:else}
       {#if loggedIn}
         <button class = 'follow-button' on:click = {handleFollow(currentUid, user.uid)}>{(isFollowed) ? 'Unfollow': "Follow"}</button>

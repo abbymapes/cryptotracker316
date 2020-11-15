@@ -1,6 +1,6 @@
 import * as sapper from '@sapper/app';
 import  firebase from 'firebase/app';
-
+import "firebase/firestore";
 
 import 'firebase/firestore'
 import 'firebase/auth'
