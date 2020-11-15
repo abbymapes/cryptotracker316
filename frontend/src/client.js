@@ -1,6 +1,6 @@
 import * as sapper from '@sapper/app';
 import  firebase from 'firebase/app';
-
+import "firebase/firestore";
 
 // These imports load individual services into the firebase namespace.
 
